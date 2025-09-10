@@ -5,25 +5,67 @@ import Image from "next/image";
 
 const portfolioImages = [
   {
-    src: "/tatto_01.jpeg",
+    src: "/tatto_007.jpg",
     alt: "Tatuaje Blackwork",
     category: "Blackwork",
     description: "Resultado de años de experiencia"
   },
   {
-    src: "/barber_03.webp", 
+    src: "/tatto_008.jpg", 
     alt: "Tatuaje Fine Line",
     category: "Fine Line",
     description: "Diseños delicados y precisos"
   },
   {
-    src: "/barber_04.jpg",
+    src: "/tatto_009.jpg",
     alt: "Tatuaje Geométrico",
     category: "Geométrico", 
     description: "Patrones únicos y modernos"
   },
   {
-    src: "/barber_05.jpg",
+    src: "/tatto_010.jpeg",
+    alt: "Tatuaje Realismo",
+    category: "Realismo",
+    description: "Arte hiperrealista en piel"
+  },
+    {
+    src: "/tatto_011.jpg", 
+    alt: "Tatuaje Fine Line",
+    category: "Fine Line",
+    description: "Diseños delicados y precisos"
+  },
+  {
+    src: "/tatto_012.jpeg",
+    alt: "Tatuaje Geométrico",
+    category: "Geométrico", 
+    description: "Patrones únicos y modernos"
+  },
+  {
+    src: "/tatto_013.jpg",
+    alt: "Tatuaje Realismo",
+    category: "Realismo",
+    description: "Arte hiperrealista en piel"
+  },
+  {
+    src: "/tatto_014.webp", 
+    alt: "Tatuaje Fine Line",
+    category: "Fine Line",
+    description: "Diseños delicados y precisos"
+  },
+  {
+    src: "/tatto_015.jpg",
+    alt: "Tatuaje Geométrico",
+    category: "Geométrico", 
+    description: "Patrones únicos y modernos"
+  },
+  {
+    src: "/tatto_016.jpg",
+    alt: "Tatuaje Realismo",
+    category: "Realismo",
+    description: "Arte hiperrealista en piel"
+  },
+  {
+    src: "/tatto_017.webp",
     alt: "Tatuaje Realismo",
     category: "Realismo",
     description: "Arte hiperrealista en piel"

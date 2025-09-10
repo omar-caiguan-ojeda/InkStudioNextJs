@@ -7,7 +7,7 @@ export default function About() {
         <div className="about-content">
           <div className="about-image">
             <Image
-              src="/barber_01.jpg"
+              src="/tatto_005.jpg"
               alt="InkStudio Interior"
               width={400}
               height={300}
@@ -43,7 +43,7 @@ export default function About() {
           </div>
           <div className="team-image">
             <Image
-              src="/barber_02.jpg"
+              src="/tatto_006.jpg"
               alt="Equipo InkStudio"
               width={500}
               height={300}

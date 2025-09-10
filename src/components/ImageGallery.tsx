@@ -7,25 +7,25 @@ import Image from 'next/image';
 export const ImageGallery: React.FC = () => {
   const galleryImages = [
     {
-      src: "/tatto_01.jpeg",
+      src: "/tatto_001.jpeg",
       alt: "Tatuaje blackwork",
       label: "Blackwork",
       position: "left"
     },
     {
-      src: "/barber_03.webp", 
+      src: "/tatto_002.webp", 
       alt: "Tatuaje fine line",
       label: "Fine Line",
       position: "right"
     },
     {
-      src: "/barber_04.jpg",
+      src: "/tatto_004.webp",
       alt: "Tatuaje geométrico", 
       label: "Geométrico",
       position: "left"
     },
     {
-      src: "/barber_05.jpg",
+      src: "/tatto_003.webp",
       alt: "Tatuaje realismo",
       label: "Realismo", 
       position: "right"
