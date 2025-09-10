@@ -3,30 +3,92 @@
 import { useState, useRef } from "react";
 
 interface BookingData {
-  service: string;
+  // Paso 1 - Nombre
+  name: string;
+  
+  // Paso 2 - Email
+  email: string;
+  
+  // Paso 3 - Teléfono
+  phone: string;
+  
+  // Paso 4 - Cómo nos encontró
+  howFoundUs: string;
+  
+  // Paso 5 - Artista preferido
+  preferredArtist: string;
+  
+  // Paso 6 - Ubicación del tatuaje
+  bodyLocation: string;
+  
+  // Paso 7 - Tamaño del tatuaje
+  tattooSize: string;
+  
+  // Paso 8 - Presupuesto
+  budgetRange: string;
+  
+  // Paso 9 - Descripción
+  description: string;
+  
+  // Paso 10 - Estilo de color
+  colorStyle: string;
+  
+  // Paso 11 - Imágenes de referencia
+  referenceImages: File[];
+  
+  // Paso 12 - Fecha y hora
   date: string;
   time: string;
-  name: string;
-  email: string;
-  phone: string;
-  description: string;
+  
+  // Paso 13 - Términos y condiciones
+  isOver18: boolean;
+  acceptsTerms: boolean;
+  acceptsPrivacy: boolean;
 }
 
 interface ValidationErrors {
-  name?: string;
-  email?: string;
-  phone?: string;
-  service?: string;
-  date?: string;
-  time?: string;
+  [key: string]: string;
 }
 
-const services = [
-  { id: "tatuaje-pequeno", name: "Tatuaje Pequeño", price: "$150-300", duration: "1-2 horas", icon: "" },
-  { id: "tatuaje-mediano", name: "Tatuaje Mediano", price: "$300-600", duration: "2-4 horas", icon: "" },
-  { id: "tatuaje-grande", name: "Tatuaje Grande", price: "$600-1200", duration: "4-8 horas", icon: "" },
-  { id: "cover-up", name: "Cover Up", price: "$400-800", duration: "3-6 horas", icon: "" },
-  { id: "retoque", name: "Retoque", price: "$100-200", duration: "1 hora", icon: "" },
+const howFoundUsOptions = [
+  "Instagram",
+  "Facebook", 
+  "Google",
+  "Recomendación",
+  "TikTok",
+  "Evento",
+  "Otro"
+];
+
+const artists = [
+  "Cualquier artista residente",
+  "Carlos Guzmán",
+  "Santiago",
+  "Ricardo", 
+  "Lucas",
+  "Chango",
+  "Leo",
+  "Más frío",
+  "Luis"
+];
+
+const tattooSizes = [
+  { id: "small", label: "Pequeño (5-10 centímetros)", description: "Ideal para primeros tatuajes" },
+  { id: "medium", label: "Mediano (10-20 centímetros)", description: "Diseños con más detalle" },
+  { id: "large", label: "Grande (20-30 centímetros)", description: "Piezas elaboradas" },
+  { id: "xlarge", label: "Extra grande (+30 centímetros)", description: "Proyectos de gran escala" }
+];
+
+const budgetRanges = [
+  { id: "budget1", label: "$150-$350 (Pequeño)", size: "small" },
+  { id: "budget2", label: "$350-$800 (Medio)", size: "medium" },
+  { id: "budget3", label: "$800-$1800 (Grande)", size: "large" }
+];
+
+const colorStyles = [
+  { id: "color", label: "Color", description: "Tatuajes con colores vibrantes" },
+  { id: "blackgray", label: "Negro y gris", description: "Estilo clásico" },
+  { id: "both", label: "Ambos/No estoy seguro", description: "Explorar opciones" }
 ];
 
 const timeSlots = [
@@ -44,78 +106,202 @@ const weekdays = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
 export default function BookingForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [bookingData, setBookingData] = useState<BookingData>({
-    service: "",
-    date: "",
-    time: "",
     name: "",
     email: "",
     phone: "",
+    howFoundUs: "",
+    preferredArtist: "",
+    bodyLocation: "",
+    tattooSize: "",
+    budgetRange: "",
     description: "",
+    colorStyle: "",
+    referenceImages: [],
+    date: "",
+    time: "",
+    isOver18: false,
+    acceptsTerms: false,
+    acceptsPrivacy: false,
   });
+  
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [bookingNumber, setBookingNumber] = useState("");
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const formRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const validateStep = (step: number): boolean => {
     const errors: ValidationErrors = {};
     let isValid = true;
 
-    if (step === 1) {
-      if (!bookingData.service) {
-        errors.service = "Por favor selecciona un servicio";
-        isValid = false;
-      }
-    } else if (step === 2) {
-      if (!bookingData.date) {
-        errors.date = "Por favor selecciona una fecha";
-        isValid = false;
-      }
-      if (!bookingData.time) {
-        errors.time = "Por favor selecciona una hora";
-        isValid = false;
-      }
-    } else if (step === 3) {
-      if (!bookingData.name || bookingData.name.trim().length < 2) {
-        errors.name = "El nombre debe tener al menos 2 caracteres";
-        isValid = false;
-      }
-      
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!bookingData.email || !emailRegex.test(bookingData.email)) {
-        errors.email = "Por favor ingresa un email válido";
-        isValid = false;
-      }
-      
-      const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
-      if (!bookingData.phone || !phoneRegex.test(bookingData.phone.replace(/[\s\-\(\)]/g, ''))) {
-        errors.phone = "Por favor ingresa un número de teléfono válido";
-        isValid = false;
-      }
+    switch (step) {
+      case 1:
+        if (!bookingData.name || bookingData.name.trim().length < 2) {
+          errors.name = "El nombre debe tener al menos 2 caracteres";
+          isValid = false;
+        }
+        break;
+        
+      case 2:
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!bookingData.email || !emailRegex.test(bookingData.email)) {
+          errors.email = "Por favor ingresa un email válido";
+          isValid = false;
+        }
+        break;
+        
+      case 3:
+        const phoneRegex = /^[\+]?[1-9][\d]{7,15}$/;
+        if (!bookingData.phone || !phoneRegex.test(bookingData.phone.replace(/[\s\-\(\)]/g, ''))) {
+          errors.phone = "Por favor ingresa un número de teléfono válido";
+          isValid = false;
+        }
+        break;
+        
+      case 4:
+        if (!bookingData.howFoundUs) {
+          errors.howFoundUs = "Por favor selecciona una opción";
+          isValid = false;
+        }
+        break;
+        
+      case 5:
+        if (!bookingData.preferredArtist) {
+          errors.preferredArtist = "Por favor selecciona un artista";
+          isValid = false;
+        }
+        break;
+        
+      case 6:
+        if (!bookingData.bodyLocation || bookingData.bodyLocation.trim().length < 3) {
+          errors.bodyLocation = "Por favor describe la ubicación del tatuaje";
+          isValid = false;
+        }
+        break;
+        
+      case 7:
+        if (!bookingData.tattooSize) {
+          errors.tattooSize = "Por favor selecciona un tamaño";
+          isValid = false;
+        }
+        break;
+        
+      case 8:
+        if (!bookingData.budgetRange) {
+          errors.budgetRange = "Por favor selecciona un rango de presupuesto";
+          isValid = false;
+        }
+        break;
+        
+      case 9:
+        if (!bookingData.description || bookingData.description.trim().length < 10) {
+          errors.description = "Por favor describe tu idea con al menos 10 caracteres";
+          isValid = false;
+        }
+        break;
+        
+      case 10:
+        if (!bookingData.colorStyle) {
+          errors.colorStyle = "Por favor selecciona un estilo de color";
+          isValid = false;
+        }
+        break;
+        
+      case 11:
+        // Las imágenes son opcionales, no se valida
+        break;
+        
+      case 12:
+        if (!bookingData.date) {
+          errors.date = "Por favor selecciona una fecha";
+          isValid = false;
+        }
+        if (!bookingData.time) {
+          errors.time = "Por favor selecciona una hora";
+          isValid = false;
+        }
+        break;
+        
+      case 13:
+        if (!bookingData.isOver18) {
+          errors.isOver18 = "Debes confirmar que eres mayor de 18 años";
+          isValid = false;
+        }
+        if (!bookingData.acceptsTerms) {
+          errors.acceptsTerms = "Debes aceptar los términos y condiciones";
+          isValid = false;
+        }
+        if (!bookingData.acceptsPrivacy) {
+          errors.acceptsPrivacy = "Debes aceptar la política de privacidad";
+          isValid = false;
+        }
+        break;
     }
 
     setValidationErrors(errors);
     return isValid;
   };
 
-  const handleInputChange = (field: keyof BookingData, value: string) => {
+  const handleInputChange = (field: keyof BookingData, value: any) => {
     setBookingData(prev => ({ ...prev, [field]: value }));
     
-    if (validationErrors[field as keyof ValidationErrors]) {
-      setValidationErrors(prev => ({ ...prev, [field]: undefined }));
+    if (validationErrors[field]) {
+      setValidationErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[field as keyof ValidationErrors];
+        return newErrors;
+      });
     }
+  };
+
+  const handleFileUpload = (files: FileList | null) => {
+    if (!files) return;
+
+    const validFiles: File[] = [];
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    const allowedTypes = ['image/png', 'image/jpeg', 'image/gif', 'image/jpg'];
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      
+      if (!allowedTypes.includes(file.type)) {
+        alert(`${file.name} no es un tipo de archivo válido. Solo se permiten PNG, JPG y GIF.`);
+        continue;
+      }
+      
+      if (file.size > maxSize) {
+        alert(`${file.name} es muy grande. El tamaño máximo es 10MB.`);
+        continue;
+      }
+      
+      validFiles.push(file);
+    }
+
+    if (bookingData.referenceImages.length + validFiles.length > 5) {
+      alert('Máximo 5 imágenes permitidas');
+      return;
+    }
+
+    handleInputChange('referenceImages', [...bookingData.referenceImages, ...validFiles]);
+  };
+
+  const removeImage = (index: number) => {
+    const newImages = bookingData.referenceImages.filter((_, i) => i !== index);
+    handleInputChange('referenceImages', newImages);
   };
 
   const nextStep = () => {
     if (validateStep(currentStep)) {
       setCurrentStep(prev => prev + 1);
+      scrollToFormTop();
     }
   };
 
   const prevStep = () => {
     setCurrentStep(prev => prev - 1);
+    scrollToFormTop();
   };
 
   const scrollToFormTop = () => {
@@ -125,21 +311,41 @@ export default function BookingForm() {
   };
 
   const handleSubmit = async () => {
-    if (!validateStep(3)) return;
+    if (!validateStep(13)) return;
 
     setIsSubmitting(true);
     
     try {
-      const response = await fetch('/api/send-email', {
+      // Convertir archivos a base64 para envío
+      const imageData = await Promise.all(
+        bookingData.referenceImages.map(async (file) => {
+          return new Promise<{name: string, data: string, type: string}>((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve({
+              name: file.name,
+              data: reader.result as string,
+              type: file.type
+            });
+            reader.readAsDataURL(file);
+          });
+        })
+      );
+
+      const dataToSend = {
+        ...bookingData,
+        referenceImages: imageData
+      };
+
+      const response = await fetch('/api/send-booking-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(bookingData),
+        body: JSON.stringify(dataToSend),
       });
 
       if (response.ok) {
         const newBookingNumber = `INK${Date.now().toString().slice(-6)}`;
         setBookingNumber(newBookingNumber);
-        setCurrentStep(4);
+        setCurrentStep(14);
       } else {
         throw new Error('Error al enviar la reserva');
       }
@@ -153,19 +359,29 @@ export default function BookingForm() {
 
   const resetForm = () => {
     setBookingData({
-      service: "",
-      date: "",
-      time: "",
       name: "",
       email: "",
       phone: "",
+      howFoundUs: "",
+      preferredArtist: "",
+      bodyLocation: "",
+      tattooSize: "",
+      budgetRange: "",
       description: "",
+      colorStyle: "",
+      referenceImages: [],
+      date: "",
+      time: "",
+      isOver18: false,
+      acceptsTerms: false,
+      acceptsPrivacy: false,
     });
     setValidationErrors({});
     setCurrentStep(1);
     scrollToFormTop();
   };
 
+  // Funciones del calendario (reutilizadas del código original)
   const getDaysInMonth = (month: number, year: number) => {
     return new Date(year, month + 1, 0).getDate();
   };
@@ -220,12 +436,50 @@ export default function BookingForm() {
     return days;
   };
 
-  const canSubmit = bookingData.name && bookingData.email && bookingData.phone;
+  const getStepTitle = (step: number): string => {
+    const titles = {
+      1: "¿Cómo te llamas?",
+      2: "¿Cuál es tu correo electrónico?", 
+      3: "¿Tu número de teléfono?",
+      4: "¿Cómo se enteró de nosotros?",
+      5: "¿Qué artista te gustaría?",
+      6: "¿En qué parte de tu cuerpo?",
+      7: "¿Pensaste cuál será el tamaño de tu tattoo?",
+      8: "¿Cuál es tu rango de presupuesto?",
+      9: "Descripción de tu idea de tatuaje",
+      10: "Estilo de color de tatuaje preferido",
+      11: "¿Alguna imagen de referencia?",
+      12: "¿Cuándo estás disponible para programar una cita?",
+      13: "Antes de continuar declare:",
+      14: "¡Solicitud enviada!"
+    };
+    return titles[step as keyof typeof titles] || "";
+  };
+
+  const getStepSubtitle = (step: number): string => {
+    const subtitles = {
+      1: "Empecemos por lo básico",
+      2: "Lo usaremos para enviarte actualizaciones.",
+      3: "Para una comunicación rápida sobre su cita.",
+      4: "Seleccione una opción",
+      5: "Elige tu artista preferido (obligatorio)",
+      6: "Cuéntanos la ubicación de tu tatuaje",
+      7: "Esto nos ayuda a estimar el tiempo y el costo",
+      8: "Esto nos ayuda a planificar en consecuencia",
+      9: "Por favor comparte tu visión, estilos o elementos específicos",
+      10: "Elige entre color o negro y gris",
+      11: "Sube imágenes que inspiren tu diseño (opcional)",
+      12: "",
+      13: "",
+      14: "Gracias por su solicitud de reserva. Revisaremos su información y nos comunicaremos con usted dentro de 4 a 8 horas."
+    };
+    return subtitles[step as keyof typeof subtitles] || "";
+  };
 
   return (
     <section className="booking-section" id="booking">
       <div className="booking-container" ref={formRef}>
-        {currentStep < 4 && (
+        {currentStep < 14 && (
           <>
             <div className="booking-header">
               <h2 className="booking-title">Reserva tu Cita</h2>
@@ -235,50 +489,43 @@ export default function BookingForm() {
             </div>
 
             <div className="progress-steps">
-              {[1, 2, 3].map((step) => (
+              {Array.from({length: 13}, (_, i) => i + 1).map((step) => (
                 <div key={step} className={`step ${currentStep >= step ? 'active' : ''} ${currentStep > step ? 'completed' : ''}`}>
                   <div className="step-number">{step}</div>
-                  <div className="step-label">
-                    {step === 1 && "Servicio"}
-                    {step === 2 && "Fecha & Hora"}
-                    {step === 3 && "Contacto"}
-                  </div>
                 </div>
               ))}
             </div>
           </>
         )}
 
+        {/* Paso 1: Nombre */}
         {currentStep === 1 && (
-          <div className="form-step step-1">
-            <h3 className="step-title">Selecciona tu Servicio</h3>
+          <div className="form-step">
+            <h3 className="step-title">{getStepTitle(1)}</h3>
+            <p className="step-subtitle">{getStepSubtitle(1)}</p>
             
-            {validationErrors.service && (
+            {validationErrors.name && (
               <div className="error-message">
                 <span className="error-icon">⚠️</span>
-                <span className="error-text">{validationErrors.service}</span>
+                <span className="error-text">{validationErrors.name}</span>
               </div>
             )}
 
-            <div className="services-grid">
-              {services.map((service) => (
-                <div
-                  key={service.id}
-                  className={`service-card ${bookingData.service === service.id ? 'selected' : ''}`}
-                  onClick={() => handleInputChange('service', service.id)}
-                >
-                  <h4 className="service-name">{service.name}</h4>
-                  <p className="service-price">{service.price}</p>
-                  <p className="service-duration">{service.duration}</p>
-                </div>
-              ))}
+            <div className="form-group">
+              <input
+                type="text"
+                className={`form-input ${validationErrors.name ? 'error' : ''}`}
+                value={bookingData.name}
+                onChange={(e) => handleInputChange('name', e.target.value)}
+                placeholder="Ingresa tu nombre completo"
+              />
             </div>
 
             <div className="form-navigation">
               <button 
-                className={`next-btn ${bookingData.service ? 'enabled' : 'disabled'}`}
+                className={`next-btn ${bookingData.name ? 'enabled' : 'disabled'}`}
                 onClick={nextStep}
-                disabled={!bookingData.service}
+                disabled={!bookingData.name}
               >
                 Continuar
               </button>
@@ -286,9 +533,433 @@ export default function BookingForm() {
           </div>
         )}
 
+        {/* Paso 2: Email */}
         {currentStep === 2 && (
           <div className="form-step">
-            <h3 className="step-title">Selecciona Fecha y Hora</h3>
+            <h3 className="step-title">{getStepTitle(2)}</h3>
+            <p className="step-subtitle">{getStepSubtitle(2)}</p>
+            
+            {validationErrors.email && (
+              <div className="error-message">
+                <span className="error-icon">⚠️</span>
+                <span className="error-text">{validationErrors.email}</span>
+              </div>
+            )}
+
+            <div className="form-group">
+              <input
+                type="email"
+                className={`form-input ${validationErrors.email ? 'error' : ''}`}
+                value={bookingData.email}
+                onChange={(e) => handleInputChange('email', e.target.value)}
+                placeholder="tu@email.com"
+              />
+            </div>
+
+            <div className="form-navigation">
+              <button className="prev-btn" onClick={prevStep}>
+                Atrás
+              </button>
+              <button 
+                className={`next-btn ${bookingData.email ? 'enabled' : 'disabled'}`}
+                onClick={nextStep}
+                disabled={!bookingData.email}
+              >
+                Continuar
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Paso 3: Teléfono */}
+        {currentStep === 3 && (
+          <div className="form-step">
+            <h3 className="step-title">{getStepTitle(3)}</h3>
+            <p className="step-subtitle">{getStepSubtitle(3)}</p>
+            
+            {validationErrors.phone && (
+              <div className="error-message">
+                <span className="error-icon">⚠️</span>
+                <span className="error-text">{validationErrors.phone}</span>
+              </div>
+            )}
+
+            <div className="form-group">
+              <input
+                type="tel"
+                className={`form-input ${validationErrors.phone ? 'error' : ''}`}
+                value={bookingData.phone}
+                onChange={(e) => handleInputChange('phone', e.target.value)}
+                placeholder="(+56) 9 **** ****"
+              />
+            </div>
+
+            <div className="form-navigation">
+              <button className="prev-btn" onClick={prevStep}>
+                Atrás
+              </button>
+              <button 
+                className={`next-btn ${bookingData.phone ? 'enabled' : 'disabled'}`}
+                onClick={nextStep}
+                disabled={!bookingData.phone}
+              >
+                Continuar
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Paso 4: Cómo nos encontró */}
+        {currentStep === 4 && (
+          <div className="form-step">
+            <h3 className="step-title">{getStepTitle(4)}</h3>
+            <p className="step-subtitle">{getStepSubtitle(4)}</p>
+            
+            {validationErrors.howFoundUs && (
+              <div className="error-message">
+                <span className="error-icon">⚠️</span>
+                <span className="error-text">{validationErrors.howFoundUs}</span>
+              </div>
+            )}
+
+            <div className="options-grid">
+              {howFoundUsOptions.map((option) => (
+                <div
+                  key={option}
+                  className={`option-card ${bookingData.howFoundUs === option ? 'selected' : ''}`}
+                  onClick={() => handleInputChange('howFoundUs', option)}
+                >
+                  <h4 className="option-name">{option}</h4>
+                </div>
+              ))}
+            </div>
+
+            <div className="form-navigation">
+              <button className="prev-btn" onClick={prevStep}>
+                Atrás
+              </button>
+              <button 
+                className={`next-btn ${bookingData.howFoundUs ? 'enabled' : 'disabled'}`}
+                onClick={nextStep}
+                disabled={!bookingData.howFoundUs}
+              >
+                Continuar
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Paso 5: Artista preferido */}
+        {currentStep === 5 && (
+          <div className="form-step">
+            <h3 className="step-title">{getStepTitle(5)}</h3>
+            <p className="step-subtitle">{getStepSubtitle(5)}</p>
+            
+            {validationErrors.preferredArtist && (
+              <div className="error-message">
+                <span className="error-icon">⚠️</span>
+                <span className="error-text">{validationErrors.preferredArtist}</span>
+              </div>
+            )}
+
+            <div className="options-grid">
+              {artists.map((artist) => (
+                <div
+                  key={artist}
+                  className={`option-card ${bookingData.preferredArtist === artist ? 'selected' : ''}`}
+                  onClick={() => handleInputChange('preferredArtist', artist)}
+                >
+                  <h4 className="option-name">{artist}</h4>
+                </div>
+              ))}
+            </div>
+
+            <div className="form-navigation">
+              <button className="prev-btn" onClick={prevStep}>
+                Atrás
+              </button>
+              <button 
+                className={`next-btn ${bookingData.preferredArtist ? 'enabled' : 'disabled'}`}
+                onClick={nextStep}
+                disabled={!bookingData.preferredArtist}
+              >
+                Continuar
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Paso 6: Ubicación del cuerpo */}
+        {currentStep === 6 && (
+          <div className="form-step">
+            <h3 className="step-title">{getStepTitle(6)}</h3>
+            <p className="step-subtitle">{getStepSubtitle(6)}</p>
+            
+            {validationErrors.bodyLocation && (
+              <div className="error-message">
+                <span className="error-icon">⚠️</span>
+                <span className="error-text">{validationErrors.bodyLocation}</span>
+              </div>
+            )}
+
+            <div className="form-group">
+              <input
+                type="text"
+                className={`form-input ${validationErrors.bodyLocation ? 'error' : ''}`}
+                value={bookingData.bodyLocation}
+                onChange={(e) => handleInputChange('bodyLocation', e.target.value)}
+                placeholder="Ej: Brazo izquierdo, espalda, pierna, etc."
+              />
+            </div>
+
+            <div className="form-navigation">
+              <button className="prev-btn" onClick={prevStep}>
+                Atrás
+              </button>
+              <button 
+                className={`next-btn ${bookingData.bodyLocation ? 'enabled' : 'disabled'}`}
+                onClick={nextStep}
+                disabled={!bookingData.bodyLocation}
+              >
+                Continuar
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Paso 7: Tamaño del tatuaje */}
+        {currentStep === 7 && (
+          <div className="form-step">
+            <h3 className="step-title">{getStepTitle(7)}</h3>
+            <p className="step-subtitle">{getStepSubtitle(7)}</p>
+            
+            {validationErrors.tattooSize && (
+              <div className="error-message">
+                <span className="error-icon">⚠️</span>
+                <span className="error-text">{validationErrors.tattooSize}</span>
+              </div>
+            )}
+
+            <div className="options-list">
+              {tattooSizes.map((size) => (
+                <div
+                  key={size.id}
+                  className={`option-card-detailed ${bookingData.tattooSize === size.id ? 'selected' : ''}`}
+                  onClick={() => handleInputChange('tattooSize', size.id)}
+                >
+                  <h4 className="option-name">{size.label}</h4>
+                  <p className="option-description">{size.description}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="form-navigation">
+              <button className="prev-btn" onClick={prevStep}>
+                Atrás
+              </button>
+              <button 
+                className={`next-btn ${bookingData.tattooSize ? 'enabled' : 'disabled'}`}
+                onClick={nextStep}
+                disabled={!bookingData.tattooSize}
+              >
+                Continuar
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Paso 8: Presupuesto */}
+        {currentStep === 8 && (
+          <div className="form-step">
+            <h3 className="step-title">{getStepTitle(8)}</h3>
+            <p className="step-subtitle">{getStepSubtitle(8)}</p>
+            
+            {validationErrors.budgetRange && (
+              <div className="error-message">
+                <span className="error-icon">⚠️</span>
+                <span className="error-text">{validationErrors.budgetRange}</span>
+              </div>
+            )}
+
+            <div className="options-list">
+              {budgetRanges.map((budget) => (
+                <div
+                  key={budget.id}
+                  className={`option-card-detailed ${bookingData.budgetRange === budget.id ? 'selected' : ''}`}
+                  onClick={() => handleInputChange('budgetRange', budget.id)}
+                >
+                  <h4 className="option-name">{budget.label}</h4>
+                </div>
+              ))}
+            </div>
+
+            <div className="form-navigation">
+              <button className="prev-btn" onClick={prevStep}>
+                Atrás
+              </button>
+              <button 
+                className={`next-btn ${bookingData.budgetRange ? 'enabled' : 'disabled'}`}
+                onClick={nextStep}
+                disabled={!bookingData.budgetRange}
+              >
+                Continuar
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Paso 9: Descripción */}
+        {currentStep === 9 && (
+          <div className="form-step">
+            <h3 className="step-title">{getStepTitle(9)}</h3>
+            <p className="step-subtitle">{getStepSubtitle(9)}</p>
+            
+            {validationErrors.description && (
+              <div className="error-message">
+                <span className="error-icon">⚠️</span>
+                <span className="error-text">{validationErrors.description}</span>
+              </div>
+            )}
+
+            <div className="form-group">
+              <textarea
+                className={`form-textarea ${validationErrors.description ? 'error' : ''}`}
+                value={bookingData.description}
+                onChange={(e) => handleInputChange('description', e.target.value)}
+                placeholder="Describe tu idea de tatuaje, incluyendo estilo, elementos específicos, simbolismo, etc."
+                rows={6}
+              />
+              <small className="char-counter">
+                {bookingData.description.length}/500 caracteres
+              </small>
+            </div>
+
+            <div className="form-navigation">
+              <button className="prev-btn" onClick={prevStep}>
+                Atrás
+              </button>
+              <button 
+                className={`next-btn ${bookingData.description.length >= 10 ? 'enabled' : 'disabled'}`}
+                onClick={nextStep}
+                disabled={bookingData.description.length < 10}
+              >
+                Continuar
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Paso 10: Estilo de color */}
+        {currentStep === 10 && (
+          <div className="form-step">
+            <h3 className="step-title">{getStepTitle(10)}</h3>
+            <p className="step-subtitle">{getStepSubtitle(10)}</p>
+            
+            {validationErrors.colorStyle && (
+              <div className="error-message">
+                <span className="error-icon">⚠️</span>
+                <span className="error-text">{validationErrors.colorStyle}</span>
+              </div>
+            )}
+
+            <div className="options-list">
+              {colorStyles.map((style) => (
+                <div
+                  key={style.id}
+                  className={`option-card-detailed ${bookingData.colorStyle === style.id ? 'selected' : ''}`}
+                  onClick={() => handleInputChange('colorStyle', style.id)}
+                >
+                  <h4 className="option-name">{style.label}</h4>
+                  <p className="option-description">{style.description}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="form-navigation">
+              <button className="prev-btn" onClick={prevStep}>
+                Atrás
+              </button>
+              <button 
+                className={`next-btn ${bookingData.colorStyle ? 'enabled' : 'disabled'}`}
+                onClick={nextStep}
+                disabled={!bookingData.colorStyle}
+              >
+                Continuar
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Paso 11: Imágenes de referencia */}
+        {currentStep === 11 && (
+          <div className="form-step">
+            <h3 className="step-title">{getStepTitle(11)}</h3>
+            <p className="step-subtitle">{getStepSubtitle(11)}</p>
+
+            <div className="file-upload-container">
+              <div 
+                className="file-upload-dropzone"
+                onClick={() => fileInputRef.current?.click()}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  handleFileUpload(e.dataTransfer.files);
+                }}
+                onDragOver={(e) => e.preventDefault()}
+              >
+                <div className="upload-icon">📷</div>
+                <p className="upload-text">Haga clic para cargar imágenes</p>
+                <p className="upload-subtext">PNG, JPG, GIF de hasta 10 MB cada uno</p>
+                <p className="upload-note">O arrastra y suelta aquí</p>
+              </div>
+              
+              <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                accept="image/png,image/jpeg,image/gif,image/jpg"
+                onChange={(e) => handleFileUpload(e.target.files)}
+                style={{ display: 'none' }}
+              />
+            </div>
+
+            {bookingData.referenceImages.length > 0 && (
+              <div className="uploaded-images">
+                <h4>Imágenes cargadas:</h4>
+                <div className="image-preview-grid">
+                  {bookingData.referenceImages.map((file, index) => (
+                    <div key={index} className="image-preview">
+                      <img 
+                        src={URL.createObjectURL(file)} 
+                        alt={`Referencia ${index + 1}`}
+                      />
+                      <button 
+                        className="remove-image"
+                        onClick={() => removeImage(index)}
+                      >
+                        ×
+                      </button>
+                      <span className="image-name">{file.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="form-navigation">
+              <button className="prev-btn" onClick={prevStep}>
+                Atrás
+              </button>
+              <button className="next-btn enabled" onClick={nextStep}>
+                Continuar
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Paso 12: Fecha y Hora */}
+        {currentStep === 12 && (
+          <div className="form-step">
+            <h3 className="step-title">{getStepTitle(12)}</h3>
             
             {(validationErrors.date || validationErrors.time) && (
               <div className="error-message">
@@ -358,75 +1029,65 @@ export default function BookingForm() {
           </div>
         )}
 
-        {currentStep === 3 && (
+        {/* Paso 13: Términos y Condiciones */}
+        {currentStep === 13 && (
           <div className="form-step">
-            <h3 className="step-title">Información de Contacto</h3>
+            <h3 className="step-title">{getStepTitle(13)}</h3>
             
-            <div className="contact-form">
-              <div className="form-group">
-                <label htmlFor="name">Nombre Completo *</label>
-                <input
-                  type="text"
-                  id="name"
-                  className={validationErrors.name ? 'error' : ''}
-                  value={bookingData.name}
-                  onChange={(e) => handleInputChange('name', e.target.value)}
-                  placeholder="Tu nombre completo"
-                />
-                {validationErrors.name && (
-                  <div className="field-error">
-                    <span className="error-icon">⚠️</span>
-                    <span className="error-text">{validationErrors.name}</span>
-                  </div>
+            <div className="terms-container">
+              <div className="checkbox-group">
+                <label className={`checkbox-label ${validationErrors.isOver18 ? 'error' : ''}`}>
+                  <input
+                    type="checkbox"
+                    checked={bookingData.isOver18}
+                    onChange={(e) => handleInputChange('isOver18', e.target.checked)}
+                  />
+                  <span className="checkmark"></span>
+                  Tengo 18 años o más
+                </label>
+                {validationErrors.isOver18 && (
+                  <span className="error-text">{validationErrors.isOver18}</span>
                 )}
               </div>
 
-              <div className="form-group">
-                <label htmlFor="email">Email *</label>
-                <input
-                  type="email"
-                  id="email"
-                  className={validationErrors.email ? 'error' : ''}
-                  value={bookingData.email}
-                  onChange={(e) => handleInputChange('email', e.target.value)}
-                  placeholder="tu@email.com"
-                />
-                {validationErrors.email && (
-                  <div className="field-error">
-                    <span className="error-icon">⚠️</span>
-                    <span className="error-text">{validationErrors.email}</span>
-                  </div>
+              <div className="checkbox-group">
+                <label className={`checkbox-label ${validationErrors.acceptsTerms ? 'error' : ''}`}>
+                  <input
+                    type="checkbox"
+                    checked={bookingData.acceptsTerms}
+                    onChange={(e) => handleInputChange('acceptsTerms', e.target.checked)}
+                  />
+                  <span className="checkmark"></span>
+                  He leído y acepto los <a href="/terminos" target="_blank">términos y condiciones</a>
+                </label>
+                {validationErrors.acceptsTerms && (
+                  <span className="error-text">{validationErrors.acceptsTerms}</span>
                 )}
               </div>
 
-              <div className="form-group">
-                <label htmlFor="phone">Teléfono *</label>
-                <input
-                  type="tel"
-                  id="phone"
-                  className={validationErrors.phone ? 'error' : ''}
-                  value={bookingData.phone}
-                  onChange={(e) => handleInputChange('phone', e.target.value)}
-                  placeholder="+1234567890"
-                />
-                {validationErrors.phone && (
-                  <div className="field-error">
-                    <span className="error-icon">⚠️</span>
-                    <span className="error-text">{validationErrors.phone}</span>
-                  </div>
+              <div className="checkbox-group">
+                <label className={`checkbox-label ${validationErrors.acceptsPrivacy ? 'error' : ''}`}>
+                  <input
+                    type="checkbox"
+                    checked={bookingData.acceptsPrivacy}
+                    onChange={(e) => handleInputChange('acceptsPrivacy', e.target.checked)}
+                  />
+                  <span className="checkmark"></span>
+                  He leído y acepto la <a href="/privacidad" target="_blank">política de privacidad</a>
+                </label>
+                {validationErrors.acceptsPrivacy && (
+                  <span className="error-text">{validationErrors.acceptsPrivacy}</span>
                 )}
               </div>
+            </div>
 
-              <div className="form-group">
-                <label htmlFor="description">Descripción del Tatuaje (Opcional)</label>
-                <textarea
-                  id="description"
-                  value={bookingData.description}
-                  onChange={(e) => handleInputChange('description', e.target.value)}
-                  placeholder="Describe tu idea de tatuaje, estilo, tamaño, ubicación..."
-                  rows={4}
-                />
-              </div>
+            <div className="important-notices">
+              <h4>AVISOS IMPORTANTES:</h4>
+              <ul>
+                <li>Se requiere un depósito no reembolsable para asegurar su reserva</li>
+                <li>Las citas requieren un aviso mínimo de 48 horas para su reprogramación</li>
+                <li>Debes tener 18 años o más para hacerte un tatuaje</li>
+              </ul>
             </div>
 
             <div className="form-navigation">
@@ -434,23 +1095,24 @@ export default function BookingForm() {
                 Atrás
               </button>
               <button 
-                className={`submit-btn ${canSubmit ? 'enabled' : 'disabled'}`}
+                className={`submit-btn ${bookingData.isOver18 && bookingData.acceptsTerms && bookingData.acceptsPrivacy ? 'enabled' : 'disabled'}`}
                 onClick={handleSubmit}
-                disabled={!canSubmit || isSubmitting}
+                disabled={!bookingData.isOver18 || !bookingData.acceptsTerms || !bookingData.acceptsPrivacy || isSubmitting}
               >
-                {isSubmitting ? 'Enviando...' : 'Agendar Cita'}
+                {isSubmitting ? 'Enviando...' : 'Enviar Solicitud'}
               </button>
             </div>
           </div>
         )}
 
-        {currentStep === 4 && (
+        {/* Paso 14: Confirmación */}
+        {currentStep === 14 && (
           <div className="booking-success">
             <div className="success-header">
               <div className="success-icon">
                 <div className="checkmark">✓</div>
               </div>
-              <h2 className="success-title">¡Reserva Confirmada!</h2>
+              <h2 className="success-title">{getStepTitle(14)}</h2>
             </div>
 
             <div className="success-content">
@@ -465,20 +1127,22 @@ export default function BookingForm() {
 
               <div className="success-message">
                 <div className="message-card">
-                  <h3 className="message-title">¿Qué sigue ahora?</h3>
-                  <p className="message-text">
-                    Hemos recibido tu solicitud de reserva y nos pondremos en contacto contigo 
-                    dentro de las próximas 24 horas para confirmar tu cita.
-                  </p>
-                  <p className="message-text">
-                    Por favor, guarda tu número de reserva para futuras referencias.
-                  </p>
+                  <p className="message-text">{getStepSubtitle(14)}</p>
+                  
+                  <div className="important-notices">
+                    <h4>AVISOS IMPORTANTES:</h4>
+                    <ul>
+                      <li>Se requiere un depósito no reembolsable para asegurar su reserva</li>
+                      <li>Las citas requieren un aviso mínimo de 48 horas para su reprogramación</li>
+                      <li>Debes tener 18 años o más para hacerte un tatuaje</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
 
               <div className="success-actions">
                 <button className="new-appointment-btn" onClick={resetForm}>
-                  <span className="btn-text">Agendar Nueva Cita</span>
+                  <span className="btn-text">Cerrar</span>
                 </button>
               </div>
             </div>
