@@ -249,243 +249,241 @@ export default function BookingForm() {
           </>
         )}
 
-        <div className="booking-form">
-          {currentStep === 1 && (
-            <div className="form-step step-1">
-              <h3 className="step-title">Selecciona tu Servicio</h3>
-              
-              {validationErrors.service && (
-                <div className="error-message">
-                  <span className="error-icon">⚠️</span>
-                  <span className="error-text">{validationErrors.service}</span>
-                </div>
-              )}
-
-              <div className="services-grid">
-                {services.map((service) => (
-                  <div
-                    key={service.id}
-                    className={`service-card ${bookingData.service === service.id ? 'selected' : ''}`}
-                    onClick={() => handleInputChange('service', service.id)}
-                  >
-                    <h4 className="service-name">{service.name}</h4>
-                    <p className="service-price">{service.price}</p>
-                    <p className="service-duration">{service.duration}</p>
-                  </div>
-                ))}
+        {currentStep === 1 && (
+          <div className="form-step step-1">
+            <h3 className="step-title">Selecciona tu Servicio</h3>
+            
+            {validationErrors.service && (
+              <div className="error-message">
+                <span className="error-icon">⚠️</span>
+                <span className="error-text">{validationErrors.service}</span>
               </div>
+            )}
 
-              <div className="form-navigation">
-                <button 
-                  className={`next-btn ${bookingData.service ? 'enabled' : 'disabled'}`}
-                  onClick={nextStep}
-                  disabled={!bookingData.service}
+            <div className="services-grid">
+              {services.map((service) => (
+                <div
+                  key={service.id}
+                  className={`service-card ${bookingData.service === service.id ? 'selected' : ''}`}
+                  onClick={() => handleInputChange('service', service.id)}
                 >
-                  Continuar
-                </button>
-              </div>
+                  <h4 className="service-name">{service.name}</h4>
+                  <p className="service-price">{service.price}</p>
+                  <p className="service-duration">{service.duration}</p>
+                </div>
+              ))}
             </div>
-          )}
 
-          {currentStep === 2 && (
-            <div className="form-step">
-              <h3 className="step-title">Selecciona Fecha y Hora</h3>
-              
-              {(validationErrors.date || validationErrors.time) && (
-                <div className="error-message">
-                  <span className="error-icon">⚠️</span>
-                  <span className="error-text">
-                    {validationErrors.date || validationErrors.time}
-                  </span>
-                </div>
-              )}
+            <div className="form-navigation">
+              <button 
+                className={`next-btn ${bookingData.service ? 'enabled' : 'disabled'}`}
+                onClick={nextStep}
+                disabled={!bookingData.service}
+              >
+                Continuar
+              </button>
+            </div>
+          </div>
+        )}
 
-              <div className="datetime-container">
-                <div className="date-section">
-                  <h3>Selecciona la Fecha</h3>
-                  <div className="calendar-container">
-                    <div className="calendar-header">
-                      <button className="nav-btn" onClick={() => navigateMonth(-1)}>
-                        ‹
-                      </button>
-                      <span className="month-year">
-                        {monthNames[selectedMonth]} {selectedYear}
-                      </span>
-                      <button className="nav-btn" onClick={() => navigateMonth(1)}>
-                        ›
-                      </button>
-                    </div>
-                    
-                    <div className="calendar-weekdays">
-                      {weekdays.map(day => (
-                        <div key={day} className="weekday">{day}</div>
-                      ))}
-                    </div>
-                    
-                    <div className="calendar-grid">
-                      {renderCalendar()}
-                    </div>
+        {currentStep === 2 && (
+          <div className="form-step">
+            <h3 className="step-title">Selecciona Fecha y Hora</h3>
+            
+            {(validationErrors.date || validationErrors.time) && (
+              <div className="error-message">
+                <span className="error-icon">⚠️</span>
+                <span className="error-text">
+                  {validationErrors.date || validationErrors.time}
+                </span>
+              </div>
+            )}
+
+            <div className="datetime-container">
+              <div className="date-section">
+                <h3>Selecciona la Fecha</h3>
+                <div className="calendar-container">
+                  <div className="calendar-header">
+                    <button className="nav-btn" onClick={() => navigateMonth(-1)}>
+                      ‹
+                    </button>
+                    <span className="month-year">
+                      {monthNames[selectedMonth]} {selectedYear}
+                    </span>
+                    <button className="nav-btn" onClick={() => navigateMonth(1)}>
+                      ›
+                    </button>
                   </div>
-                </div>
-
-                <div className="time-section">
-                  <h3>Selecciona la Hora</h3>
-                  <div className="time-slots">
-                    {timeSlots.map((time) => (
-                      <div
-                        key={time}
-                        className={`time-slot ${bookingData.time === time ? 'selected' : ''}`}
-                        onClick={() => handleInputChange('time', time)}
-                      >
-                        {time}
-                      </div>
+                  
+                  <div className="calendar-weekdays">
+                    {weekdays.map(day => (
+                      <div key={day} className="weekday">{day}</div>
                     ))}
                   </div>
-                </div>
-              </div>
-
-              <div className="form-navigation">
-                <button className="prev-btn" onClick={prevStep}>
-                  Atrás
-                </button>
-                <button 
-                  className={`next-btn ${bookingData.date && bookingData.time ? 'enabled' : 'disabled'}`}
-                  onClick={nextStep}
-                  disabled={!bookingData.date || !bookingData.time}
-                >
-                  Continuar
-                </button>
-              </div>
-            </div>
-          )}
-
-          {currentStep === 3 && (
-            <div className="form-step">
-              <h3 className="step-title">Información de Contacto</h3>
-              
-              <div className="contact-form">
-                <div className="form-group">
-                  <label htmlFor="name">Nombre Completo *</label>
-                  <input
-                    type="text"
-                    id="name"
-                    className={validationErrors.name ? 'error' : ''}
-                    value={bookingData.name}
-                    onChange={(e) => handleInputChange('name', e.target.value)}
-                    placeholder="Tu nombre completo"
-                  />
-                  {validationErrors.name && (
-                    <div className="field-error">
-                      <span className="error-icon">⚠️</span>
-                      <span className="error-text">{validationErrors.name}</span>
-                    </div>
-                  )}
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="email">Email *</label>
-                  <input
-                    type="email"
-                    id="email"
-                    className={validationErrors.email ? 'error' : ''}
-                    value={bookingData.email}
-                    onChange={(e) => handleInputChange('email', e.target.value)}
-                    placeholder="tu@email.com"
-                  />
-                  {validationErrors.email && (
-                    <div className="field-error">
-                      <span className="error-icon">⚠️</span>
-                      <span className="error-text">{validationErrors.email}</span>
-                    </div>
-                  )}
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="phone">Teléfono *</label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    className={validationErrors.phone ? 'error' : ''}
-                    value={bookingData.phone}
-                    onChange={(e) => handleInputChange('phone', e.target.value)}
-                    placeholder="+1234567890"
-                  />
-                  {validationErrors.phone && (
-                    <div className="field-error">
-                      <span className="error-icon">⚠️</span>
-                      <span className="error-text">{validationErrors.phone}</span>
-                    </div>
-                  )}
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="description">Descripción del Tatuaje (Opcional)</label>
-                  <textarea
-                    id="description"
-                    value={bookingData.description}
-                    onChange={(e) => handleInputChange('description', e.target.value)}
-                    placeholder="Describe tu idea de tatuaje, estilo, tamaño, ubicación..."
-                    rows={4}
-                  />
-                </div>
-              </div>
-
-              <div className="form-navigation">
-                <button className="prev-btn" onClick={prevStep}>
-                  Atrás
-                </button>
-                <button 
-                  className={`submit-btn ${canSubmit ? 'enabled' : 'disabled'}`}
-                  onClick={handleSubmit}
-                  disabled={!canSubmit || isSubmitting}
-                >
-                  {isSubmitting ? 'Enviando...' : 'Agendar Cita'}
-                </button>
-              </div>
-            </div>
-          )}
-
-          {currentStep === 4 && (
-            <div className="booking-success">
-              <div className="success-header">
-                <div className="success-icon">
-                  <div className="checkmark">✓</div>
-                </div>
-                <h2 className="success-title">¡Reserva Confirmada!</h2>
-              </div>
-
-              <div className="success-content">
-                <div className="booking-number-card">
-                  <div className="booking-number-header">
-                    <p className="booking-label">Número de Reserva</p>
-                  </div>
-                  <div className="booking-number-display">
-                    <span className="booking-number">{bookingNumber}</span>
+                  
+                  <div className="calendar-grid">
+                    {renderCalendar()}
                   </div>
                 </div>
+              </div>
 
-                <div className="success-message">
-                  <div className="message-card">
-                    <h3 className="message-title">¿Qué sigue ahora?</h3>
-                    <p className="message-text">
-                      Hemos recibido tu solicitud de reserva y nos pondremos en contacto contigo 
-                      dentro de las próximas 24 horas para confirmar tu cita.
-                    </p>
-                    <p className="message-text">
-                      Por favor, guarda tu número de reserva para futuras referencias.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="success-actions">
-                  <button className="new-appointment-btn" onClick={resetForm}>
-                    <span className="btn-text">Agendar Nueva Cita</span>
-                  </button>
+              <div className="time-section">
+                <h3>Selecciona la Hora</h3>
+                <div className="time-slots">
+                  {timeSlots.map((time) => (
+                    <div
+                      key={time}
+                      className={`time-slot ${bookingData.time === time ? 'selected' : ''}`}
+                      onClick={() => handleInputChange('time', time)}
+                    >
+                      {time}
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
-          )}
-        </div>
+
+            <div className="form-navigation">
+              <button className="prev-btn" onClick={prevStep}>
+                Atrás
+              </button>
+              <button 
+                className={`next-btn ${bookingData.date && bookingData.time ? 'enabled' : 'disabled'}`}
+                onClick={nextStep}
+                disabled={!bookingData.date || !bookingData.time}
+              >
+                Continuar
+              </button>
+            </div>
+          </div>
+        )}
+
+        {currentStep === 3 && (
+          <div className="form-step">
+            <h3 className="step-title">Información de Contacto</h3>
+            
+            <div className="contact-form">
+              <div className="form-group">
+                <label htmlFor="name">Nombre Completo *</label>
+                <input
+                  type="text"
+                  id="name"
+                  className={validationErrors.name ? 'error' : ''}
+                  value={bookingData.name}
+                  onChange={(e) => handleInputChange('name', e.target.value)}
+                  placeholder="Tu nombre completo"
+                />
+                {validationErrors.name && (
+                  <div className="field-error">
+                    <span className="error-icon">⚠️</span>
+                    <span className="error-text">{validationErrors.name}</span>
+                  </div>
+                )}
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="email">Email *</label>
+                <input
+                  type="email"
+                  id="email"
+                  className={validationErrors.email ? 'error' : ''}
+                  value={bookingData.email}
+                  onChange={(e) => handleInputChange('email', e.target.value)}
+                  placeholder="tu@email.com"
+                />
+                {validationErrors.email && (
+                  <div className="field-error">
+                    <span className="error-icon">⚠️</span>
+                    <span className="error-text">{validationErrors.email}</span>
+                  </div>
+                )}
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="phone">Teléfono *</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  className={validationErrors.phone ? 'error' : ''}
+                  value={bookingData.phone}
+                  onChange={(e) => handleInputChange('phone', e.target.value)}
+                  placeholder="+1234567890"
+                />
+                {validationErrors.phone && (
+                  <div className="field-error">
+                    <span className="error-icon">⚠️</span>
+                    <span className="error-text">{validationErrors.phone}</span>
+                  </div>
+                )}
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="description">Descripción del Tatuaje (Opcional)</label>
+                <textarea
+                  id="description"
+                  value={bookingData.description}
+                  onChange={(e) => handleInputChange('description', e.target.value)}
+                  placeholder="Describe tu idea de tatuaje, estilo, tamaño, ubicación..."
+                  rows={4}
+                />
+              </div>
+            </div>
+
+            <div className="form-navigation">
+              <button className="prev-btn" onClick={prevStep}>
+                Atrás
+              </button>
+              <button 
+                className={`submit-btn ${canSubmit ? 'enabled' : 'disabled'}`}
+                onClick={handleSubmit}
+                disabled={!canSubmit || isSubmitting}
+              >
+                {isSubmitting ? 'Enviando...' : 'Agendar Cita'}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {currentStep === 4 && (
+          <div className="booking-success">
+            <div className="success-header">
+              <div className="success-icon">
+                <div className="checkmark">✓</div>
+              </div>
+              <h2 className="success-title">¡Reserva Confirmada!</h2>
+            </div>
+
+            <div className="success-content">
+              <div className="booking-number-card">
+                <div className="booking-number-header">
+                  <p className="booking-label">Número de Reserva</p>
+                </div>
+                <div className="booking-number-display">
+                  <span className="booking-number">{bookingNumber}</span>
+                </div>
+              </div>
+
+              <div className="success-message">
+                <div className="message-card">
+                  <h3 className="message-title">¿Qué sigue ahora?</h3>
+                  <p className="message-text">
+                    Hemos recibido tu solicitud de reserva y nos pondremos en contacto contigo 
+                    dentro de las próximas 24 horas para confirmar tu cita.
+                  </p>
+                  <p className="message-text">
+                    Por favor, guarda tu número de reserva para futuras referencias.
+                  </p>
+                </div>
+              </div>
+
+              <div className="success-actions">
+                <button className="new-appointment-btn" onClick={resetForm}>
+                  <span className="btn-text">Agendar Nueva Cita</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
