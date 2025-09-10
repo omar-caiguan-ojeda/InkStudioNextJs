@@ -1,0 +1,70 @@
+// /lib/appData.ts
+export const appData = {
+  services: [
+    {
+      id: "small",
+      title: "Tatuaje Pequeño",
+      description: "Diseños hasta 5cm. Perfecto para primeros tatuajes.",
+      duration: "1-2 horas",
+      priceRange: "$80 - $150",
+      features: ["Líneas finas", "Detalles pequeños", "Consulta incluida"],
+      category: "small",
+    },
+    {
+      id: "medium",
+      title: "Tatuaje Mediano",
+      description: "Diseños hasta 15cm. Piezas con elaboración media.",
+      duration: "2-4 horas",
+      priceRange: "$200 - $400",
+      features: ["Sombreado", "Colores básicos", "Boceto personalizado"],
+      category: "medium",
+    },
+    {
+      id: "large",
+      title: "Tatuaje Grande",
+      description: "Diseños complejos hasta 25cm. Piezas elaboradas con múltiples sesiones.",
+      duration: "4-8 horas",
+      priceRange: "$500 - $800",
+      features: ["Diseños complejos", "Múltiples sesiones", "Resultados impresionantes"],
+      category: "large",
+    },
+    {
+      id: "cover-up",
+      title: "Cover-Up",
+      description: "Transformamos tatuajes antiguos en nuevas obras de arte.",
+      duration: "3-6 horas",
+      priceRange: "$300 - $600",
+      features: ["Transformación de tatuajes", "Nuevas obras de arte", "Resultados únicos"],
+      category: "cover-up",
+    },
+    {
+      id: "consultation",
+      title: "Consulta de Diseño",
+      description: "45 min para planificar tu proyecto soñado.",
+      duration: "45 minutos",
+      priceRange: "$50",
+      features: ["Boceto inicial", "Cotización exacta", "Consejos de cuidado"],
+      category: "consultation",
+    },
+  ],
+  heroTexts: {
+    typewritingSequences: [
+      "Agenda tu Próxima Obra Maestra",
+      "Convierte tus Ideas en Arte Permanente",
+      "Especialistas en Blackwork y Fine Line",
+      "Tu Historia, Nuestra Técnica",
+    ],
+    headerTypewritingSequences: [
+      "Arte Premium",
+      "Blackwork Specialist",
+      "Fine Line Expert",
+      "Tu Visión, Nuestro Arte",
+    ],
+    footerTypewritingSequences: [
+      "¿Primer Tatuaje?",
+      "¿Próxima Obra?",
+      "¿Nueva Historia?",
+      "¿Arte Definitivo?",
+    ],
+  },
+};

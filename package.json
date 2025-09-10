@@ -6,12 +6,16 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
+    "type-check": "tsc --noEmit",
+    "build-check": "node build-check.js"
   },
   "dependencies": {
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "next": "15.5.2"
+    "next": "15.5.2",
+    "resend": "^4.0.0"
   },
   "devDependencies": {
     "typescript": "^5",
@@ -20,6 +24,8 @@
     "@types/react-dom": "^19",
     "@tailwindcss/postcss": "^4",
     "tailwindcss": "^4",
+    "autoprefixer": "^10",
+    "postcss": "^8",
     "eslint": "^9",
     "eslint-config-next": "15.5.2",
     "@eslint/eslintrc": "^3"
