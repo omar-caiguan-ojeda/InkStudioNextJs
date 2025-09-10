@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -8,12 +7,16 @@ import About from "../components/About";
 import Carrousel from "../components/Carrousel";
 import Services from "../components/Services";
 import BookingForm from "../components/BookingForm";
+import Contact from "../components/Contact";
 import Footer from "../components/Footer";
 
 export default function HomePage() {
   const [language, setLanguage] = useState<'es' | 'en'>('es');
 
   useEffect(() => {
+    // Always scroll to top on page load/reload
+    window.scrollTo(0, 0);
+    
     // Smooth scrolling for navigation links
     const handleSmoothScroll = (e: Event) => {
       const target = e.target as HTMLAnchorElement;
@@ -102,8 +105,13 @@ export default function HomePage() {
       </div>
 
       {/* Booking Section */}
-      <div className="scroll-animate">
+      <div className="scroll-animate booking-container" id="booking">
         <BookingForm />
+      </div>
+
+      {/* Contact Section */}
+      <div className="scroll-animate">
+        <Contact language={language} />
       </div>
 
       {/* Footer */}

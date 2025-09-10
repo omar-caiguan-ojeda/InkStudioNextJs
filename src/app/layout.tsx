@@ -17,6 +17,11 @@ export const metadata: Metadata = {
     "InkStudio",
   ],
   authors: [{ name: "InkStudio Team" }],
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/icon.png",
+    apple: "/icon.png",
+  },
   openGraph: {
     type: "website",
     url: "https://inkstudio-tattoo.vercel.app/",

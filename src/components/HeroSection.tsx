@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -13,7 +12,7 @@ interface HeroSectionProps {
 
 const HeroSection: React.FC<HeroSectionProps> = ({ language }) => {
   const scrollToBooking = () => {
-    const bookingSection = document.getElementById('booking');
+    const bookingSection = document.querySelector('.booking-container');
     if (bookingSection) {
       bookingSection.scrollIntoView({ behavior: 'smooth' });
     }
@@ -24,13 +23,13 @@ const HeroSection: React.FC<HeroSectionProps> = ({ language }) => {
         title: "Arte en tu",
         accent: "Piel",
         description: "Especialistas en blackwork, fine line y realismo. Transforma tus ideas en arte permanente con nuestros artistas certificados.",
-        ctaButton: "Comenzar mi Tatuaje"
+        ctaButton: "Agendar Cita"
       }
     : {
         title: "Art on your",
         accent: "Skin", 
         description: "Specialists in blackwork, fine line and realism. Transform your ideas into permanent art with our certified artists.",
-        ctaButton: "Start my Tattoo"
+        ctaButton: "Book Appointment"
       };
 
   return (
@@ -39,8 +38,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ language }) => {
         <div className="hero-main">
           <div className="hero-text">
             <h1 className="hero-title fade-in-up">
-              {heroTexts.title}{" "}
-              <span className="hero-accent">
+              {heroTexts.title} <span className="hero-accent">
                 {heroTexts.accent}
                 <div className="hero-accent-line"></div>
               </span>
@@ -56,16 +54,13 @@ const HeroSection: React.FC<HeroSectionProps> = ({ language }) => {
 
             <AnimatedStats language={language} />
 
-            <button className="hero-cta fade-in-up" onClick={scrollToBooking}>
-              <div className="hero-cta-overlay"></div>
-              <span className="hero-cta-text">
-                {heroTexts.ctaButton}
-                <span className="hero-cta-arrow">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                    <path d="M5 12h14m-7-7l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </span>
-              </span>
+            <button className="cta-button" onClick={scrollToBooking}>
+              <div className="cta-overlay"></div>
+              {language === 'es' ? (
+                <span className="cta-text">Agendar Cita</span>
+              ) : (
+                <span className="cta-text">Book Appointment</span>
+              )}
             </button>
           </div>
 

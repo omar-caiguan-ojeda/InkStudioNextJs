@@ -5,7 +5,7 @@ import Image from "next/image";
 import About from "@/src/components/About";
 import Carrousel from "@/src/components/Carrousel";
 import Services from "@/src/components/Services";
-import BookingForm from "@/src/components/BookingForm";
+import BookingForm from "@/src/components/BookingForm1";
 import Footer from "@/src/components/Footer";
 
 export default function HomePage() {
