@@ -119,7 +119,7 @@ export default function BookingForm() {
         throw new Error('Error al enviar la cita');
       }
     } catch (error) {
-      alert('Error al agendar la cita. Por favor intenta nuevamente.');
+      alert('Error al agendar la cita. Por favor intenta nuevamente.' + error);
     } finally {
       setIsSubmitting(false);
     }

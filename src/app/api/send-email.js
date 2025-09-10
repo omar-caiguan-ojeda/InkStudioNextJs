@@ -2,7 +2,7 @@ import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const fromEmail = process.env.FROM_EMAIL;
-const toEmail = process.env.TO_EMAIL;
+const toEmail = process.env.ADMIN_EMAIL;
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {

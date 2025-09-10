@@ -1,6 +1,19 @@
+interface Customer {
+    id: string;
+    name: string;
+    // Otras propiedades como email, phone, etc., según lo necesites
+}
+
+interface Appointment {
+    id: string;
+    status: 'pending' | 'confirmed' | 'cancelled';
+    // Otras propiedades como date, customerId, etc., según lo requieras
+}
+
 interface CrmStatsProps {
-  customers: any[];
-  appointments: { status: string }[];
+  customers: Customer[];
+  appointments: Appointment[];
+  //appointments: { status: string }[];
 }
 
 export default function CrmStats({ customers, appointments }: CrmStatsProps) {

@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 interface HeroDynamicTextProps {
   language: 'es' | 'en';
@@ -13,19 +13,37 @@ export const HeroDynamicText: React.FC<HeroDynamicTextProps> = ({ language }) =>
   const [isDeleting, setIsDeleting] = useState(false);
   const [charIndex, setCharIndex] = useState(0);
 
-  const texts = language === 'es' 
-    ? [
-        "Convierte tus ideas en arte permanente",
-        "Especialistas en blackwork y fine line",
-        "Tu historia, nuestra técnica",
-        "Agenda tu próxima obra maestra"
-      ]
-    : [
-        "Turn your ideas into permanent art",
-        "Specialists in blackwork and fine line",
-        "Your story, our technique", 
-        "Schedule your next masterpiece"
-      ];
+  // const texts = language === 'es' 
+  //   ? [
+  //       "Convierte tus ideas en arte permanente",
+  //       "Especialistas en blackwork y fine line",
+  //       "Tu historia, nuestra técnica",
+  //       "Agenda tu próxima obra maestra"
+  //     ]
+  //   : [
+  //       "Turn your ideas into permanent art",
+  //       "Specialists in blackwork and fine line",
+  //       "Your story, our technique", 
+  //       "Schedule your next masterpiece"
+  //     ];
+
+      const texts = useMemo(() => {
+    return language === 'es' 
+      ? [
+          "Convierte tus ideas en arte permanente",
+          "Especialistas en blackwork y fine line",
+          "Tu historia, nuestra técnica",
+          "Agenda tu próxima obra maestra"
+        ]
+      : [
+          "Turn your ideas into permanent art",
+          "Specialists in blackwork and fine line",
+          "Your story, our technique", 
+          "Schedule your next masterpiece"
+        ];
+  }, [language]);
+
+
 
   useEffect(() => {
     const typeSpeed = 80;
