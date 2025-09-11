@@ -223,7 +223,7 @@ export async function POST(request: NextRequest) {
       attachments: attachments.length > 0 ? attachments : undefined
     };
 
-    // Confirmation email to client  
+    // Confirmation email to client
     const clientEmailData = {
       from: process.env.FROM_EMAIL || 'onboarding@resend.dev',
       to: [bookingData.email],
@@ -347,99 +347,22 @@ export async function POST(request: NextRequest) {
 
     // Send both emails
     try {
-      const emailResults = await Promise.allSettled([
+      await Promise.all([
         resend.emails.send(adminEmailData),
         resend.emails.send(clientEmailData)
       ]);
 
-      // Check email results
-      const adminEmailResult = emailResults[0];
-      const clientEmailResult = emailResults[1];
-
-      console.log('Admin email result:', adminEmailResult);
-      console.log('Client email result:', clientEmailResult);
-
-      // Continue even if client email fails (Resend limitations)
-      let emailStatus = 'parcial';
-      if (adminEmailResult.status === 'fulfilled' && clientEmailResult.status === 'fulfilled') {
-        emailStatus = 'completo';
-      } else if (adminEmailResult.status === 'fulfilled') {
-        emailStatus = 'solo_admin';
-      }
+      return NextResponse.json({
+        message: 'Solicitud enviada exitosamente. Te contactaremos pronto.',
+        bookingNumber: bookingNumber
+      }, { status: 200 });
 
     } catch (emailError) {
       console.error('Error sending emails:', emailError);
+      return NextResponse.json({
+        error: 'Error al enviar los emails de confirmación'
+      }, { status: 500 });
     }
-
-    // =====================================
-    // NUEVA INTEGRACIÓN CON BUDIBASE CRM
-    // =====================================
-    
-    try {
-      if (process.env.BUDIBASE_WEBHOOK_URL) {
-        // Preparar datos para Budibase
-        const budibaseData = {
-          nombre: bookingData.name,
-          email: bookingData.email,
-          telefono: bookingData.phone,
-          como_nos_encontro: bookingData.howFoundUs,
-          artista_preferido: bookingData.preferredArtist,
-          ubicacion_tatuaje: bookingData.bodyLocation,
-          tamano: bookingData.tattooSize,
-          presupuesto: bookingData.budgetRange,
-          descripcion: bookingData.description,
-          estilo_color: bookingData.colorStyle,
-          fecha_solicitada: bookingData.date,
-          hora_solicitada: bookingData.time,
-          numero_reserva: bookingNumber,
-          estado: 'pendiente',
-          fecha_creacion: new Date().toISOString(),
-          mayor_edad: bookingData.isOver18,
-          imagenes_referencia: bookingData.referenceImages.map(img => ({
-            nombre: img.name,
-            tipo: img.type,
-            tamano_kb: Math.round(img.data.length * 0.75 / 1024) // Aproximación del tamaño
-          })),
-          // Campos adicionales para el CRM
-          notas_admin: `Lead generado automáticamente desde el formulario web. Cliente interesado en ${tattooSizeLabels[bookingData.tattooSize]} en ${bookingData.bodyLocation}.`,
-          fecha_contacto: null,
-          fecha_confirmacion: null
-        };
-
-        // Enviar a Budibase
-        const budibaseResponse = await fetch(process.env.BUDIBASE_WEBHOOK_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            // Agregar API key si tienes configurada
-            ...(process.env.BUDIBASE_API_KEY && {
-              'Authorization': `Bearer ${process.env.BUDIBASE_API_KEY}`
-            })
-          },
-          body: JSON.stringify(budibaseData)
-        });
-
-        if (!budibaseResponse.ok) {
-          const errorText = await budibaseResponse.text();
-          console.error('Error enviando a Budibase:', errorText);
-        } else {
-          console.log('✅ Lead enviado a Budibase CRM exitosamente');
-        }
-      } else {
-        console.log('⚠️ BUDIBASE_WEBHOOK_URL no configurado, saltando integración CRM');
-      }
-
-    } catch (budibaseError) {
-      console.error('❌ Error con Budibase CRM:', budibaseError);
-      // No fallar todo el proceso si Budibase falla
-    }
-
-    // Return successful response
-    return NextResponse.json({
-      message: 'Solicitud enviada exitosamente. Te contactaremos pronto.',
-      bookingNumber: bookingNumber,
-      status: 'success'
-    }, { status: 200 });
 
   } catch (error) {
     console.error('Error processing booking:', error);
