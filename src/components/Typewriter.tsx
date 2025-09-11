@@ -18,7 +18,6 @@ export default function Typewriter({
   const [text, setText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [loop, setLoop] = useState(0);
-  const [typingSpeed, setTypingSpeed] = useState(typeSpeed);
 
   useEffect(() => {
     const handleTyping = () => {
@@ -31,8 +30,6 @@ export default function Typewriter({
           : fullText.substring(0, text.length + 1)
       );
 
-      setTypingSpeed(isDeleting ? deleteSpeed : typeSpeed);
-
       if (!isDeleting && text === fullText) {
         setTimeout(() => setIsDeleting(true), pauseTime);
       } else if (isDeleting && text === "") {
@@ -41,9 +38,10 @@ export default function Typewriter({
       }
     };
 
-    const timer = setTimeout(handleTyping, typingSpeed);
+    const currentSpeed = isDeleting ? deleteSpeed : typeSpeed;
+    const timer = setTimeout(handleTyping, currentSpeed);
     return () => clearTimeout(timer);
-  }, [text, isDeleting, loop]);
+  }, [text, isDeleting, loop, texts, typeSpeed, deleteSpeed, pauseTime]);
 
   return <span>{text}</span>;
 }

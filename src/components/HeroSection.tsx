@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
+import React from 'react';
 import { HeroDynamicText } from './HeroDynamicText';
 import { AnimatedStats } from './AnimatedStats';
 import { ImageGallery } from './ImageGallery';

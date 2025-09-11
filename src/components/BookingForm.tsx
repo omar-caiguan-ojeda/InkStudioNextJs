@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import Image from 'next/image';
 
 interface BookingData {
   // Paso 1 - Nombre
@@ -244,7 +245,7 @@ export default function BookingForm() {
     return isValid;
   };
 
-  const handleInputChange = (field: keyof BookingData, value: any) => {
+  const handleInputChange = (field: keyof BookingData, value: BookingData[keyof BookingData]) => {
     setBookingData(prev => ({ ...prev, [field]: value }));
     
     if (validationErrors[field]) {
@@ -928,9 +929,12 @@ export default function BookingForm() {
                 <div className="image-preview-grid">
                   {bookingData.referenceImages.map((file, index) => (
                     <div key={index} className="image-preview">
-                      <img 
+                      <Image 
                         src={URL.createObjectURL(file)} 
                         alt={`Referencia ${index + 1}`}
+                        width={100}
+                        height={100}
+                        style={{ objectFit: 'cover' }}
                       />
                       <button 
                         className="remove-image"

@@ -82,8 +82,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Prepare image attachments for email
-    const attachments = bookingData.referenceImages.map((img, index) => ({
-      filename: `referencia_${index + 1}_${img.name}`,
+    const attachments = bookingData.referenceImages.map((img) => ({
+      filename: `referencia_${img.name}`,
       content: img.data.split(',')[1], // Remove data:image/jpeg;base64, prefix
       type: img.type,
       disposition: 'attachment'
@@ -178,7 +178,7 @@ export async function POST(request: NextRequest) {
               </h3>
               <p>Se han adjuntado ${bookingData.referenceImages.length} imagen(es) de referencia a este email.</p>
               <div style="margin-top: 10px;">
-                ${bookingData.referenceImages.map((img, index) => 
+                ${bookingData.referenceImages.map((img) => 
                   `<span style="display: inline-block; background: white; padding: 8px 12px; border-radius: 6px; margin: 4px; border: 1px solid #e5e7eb;">📎 ${img.name}</span>`
                 ).join('')}
               </div>

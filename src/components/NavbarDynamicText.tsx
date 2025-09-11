@@ -1,7 +1,6 @@
-
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 interface NavbarDynamicTextProps {
   language: 'es' | 'en';
@@ -13,7 +12,7 @@ export const NavbarDynamicText: React.FC<NavbarDynamicTextProps> = ({ language }
   const [isDeleting, setIsDeleting] = useState(false);
   const [charIndex, setCharIndex] = useState(0);
 
-  const texts = language === 'es' 
+  const texts = useMemo(() => language === 'es' 
     ? [
         "Blackwork Specialist",
         "Fine Line Expert", 
@@ -25,7 +24,7 @@ export const NavbarDynamicText: React.FC<NavbarDynamicTextProps> = ({ language }
         "Fine Line Expert",
         "Your vision, our art",
         "Premium Art"
-      ];
+      ], [language]);
 
   useEffect(() => {
     const typeSpeed = 100;
