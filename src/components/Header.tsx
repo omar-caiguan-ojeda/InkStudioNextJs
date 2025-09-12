@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -30,15 +29,15 @@ const Header: React.FC<HeaderProps> = ({ language }) => {
   const navItems = language === 'es' 
     ? [
         { href: '#about-us', label: 'Quiénes Somos' },
-        { href: '#servicios', label: 'Servicios' },
         { href: '#portfolio', label: 'Portfolio' },
+        { href: '#servicios', label: 'Servicios' },
         { href: '#booking', label: 'Agendar' },
         { href: '#contacto', label: 'Contacto' }
       ]
     : [
         { href: '#about-us', label: 'About Us' },
-        { href: '#services', label: 'Services' },
         { href: '#portfolio', label: 'Portfolio' },
+        { href: '#services', label: 'Services' },
         { href: '#booking', label: 'Book' },
         { href: '#contact', label: 'Contact' }
       ];

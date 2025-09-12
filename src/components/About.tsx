@@ -5,7 +5,7 @@ export default function About() {
     <section id="about-us" className="about-section">
       <div className="about-container">
         <div className="about-content">
-          <div className="about-image">
+          <div className="about-image-wrapper">
             <Image
               src="/tatto_005.jpg"
               alt="InkStudio Interior"
@@ -13,6 +13,7 @@ export default function About() {
               height={300}
               className="about-img"
             />
+            <div className="gallery-glow"></div>
           </div>
           <div className="about-text">
             <h2 className="about-title">Quiénes Somos</h2>
@@ -41,7 +42,7 @@ export default function About() {
               ★ Porque en InkStudio, tu piel es nuestro lienzo y tu historia nuestra inspiración.
             </p>
           </div>
-          <div className="team-image">
+          <div className="about-image-wrapper">
             <Image
               src="/tatto_006.jpg"
               alt="Equipo InkStudio"
@@ -49,6 +50,7 @@ export default function About() {
               height={300}
               className="team-img"
             />
+            <div className="gallery-glow"></div>
           </div>
         </div>
       </div>

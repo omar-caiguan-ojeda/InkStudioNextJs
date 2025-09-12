@@ -894,8 +894,8 @@ export default function BookingForm() {
         {/* Paso 11: Imágenes de referencia */}
         {currentStep === 11 && (
           <div className="form-step">
-            <h3 className="step-title">{getStepTitle(11)}</h3>
-            <p className="step-subtitle">{getStepSubtitle(11)}</p>
+            <h3 className="step-title">¿Alguna imagen de referencia?</h3>
+            <p className="step-subtitle">Sube imágenes que inspiren tu diseño (opcional)</p>
 
             <div className="file-upload-container">
               <div 
@@ -907,9 +907,15 @@ export default function BookingForm() {
                 }}
                 onDragOver={(e) => e.preventDefault()}
               >
-                <div className="upload-icon">📷</div>
-                <p className="upload-text">Haga clic para cargar imágenes</p>
-                <p className="upload-subtext">PNG, JPG, GIF de hasta 10 MB cada uno</p>
+                <div className="upload-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                  </svg>
+                </div>
+                <p className="upload-text">Click to upload images</p>
+                <p className="upload-subtext">PNG, JPG, GIF up to 10MB each</p>
                 <p className="upload-note">O arrastra y suelta aquí</p>
               </div>
               
@@ -1132,15 +1138,6 @@ export default function BookingForm() {
               <div className="success-message">
                 <div className="message-card">
                   <p className="message-text">{getStepSubtitle(14)}</p>
-                  
-                  <div className="important-notices">
-                    <h4>AVISOS IMPORTANTES:</h4>
-                    <ul>
-                      <li>Se requiere un depósito no reembolsable para asegurar su reserva</li>
-                      <li>Las citas requieren un aviso mínimo de 48 horas para su reprogramación</li>
-                      <li>Debes tener 18 años o más para hacerte un tatuaje</li>
-                    </ul>
-                  </div>
                 </div>
               </div>
 
