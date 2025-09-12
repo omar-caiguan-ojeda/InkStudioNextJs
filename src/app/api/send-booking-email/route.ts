@@ -369,61 +369,85 @@ export async function POST(request: NextRequest) {
     
     try {
       if (process.env.BUDIBASE_WEBHOOK_URL) {
-        // Preparar datos para Budibase
+        // --- Combinar fecha y hora para Budibase ---
+        const appointmentDateTime = new Date(`${bookingData.date}T${bookingData.time}:00`);
+
+        // Verificar si la fecha es válida
+        if (isNaN(appointmentDateTime.getTime())) {
+          console.error('Fecha u hora inválida:', bookingData.date, bookingData.time);
+          // Opcional: retornar un error si la fecha no es válida
+        }
+
+        // Preparar datos para Budibase (Versión Final Enriquecida)
         const budibaseData = {
           nombre: bookingData.name,
           email: bookingData.email,
           telefono: bookingData.phone,
-          como_nos_encontro: bookingData.howFoundUs,
+          como_nos_encontro: howFoundUsLabels[bookingData.howFoundUs] || bookingData.howFoundUs,
           artista_preferido: bookingData.preferredArtist,
           ubicacion_tatuaje: bookingData.bodyLocation,
-          tamano: bookingData.tattooSize,
-          presupuesto: bookingData.budgetRange,
+          tamano: tattooSizeLabels[bookingData.tattooSize] || bookingData.tattooSize,
+          presupuesto: budgetLabels[bookingData.budgetRange] || bookingData.budgetRange,
           descripcion: bookingData.description,
-          estilo_color: bookingData.colorStyle,
-          fecha_solicitada: bookingData.date,
-          hora_solicitada: bookingData.time,
+          estilo_color: colorStyleLabels[bookingData.colorStyle] || bookingData.colorStyle,
+          fecha_hora_cita: appointmentDateTime.toISOString(),
           numero_reserva: bookingNumber,
           estado: 'pendiente',
           fecha_creacion: new Date().toISOString(),
           mayor_edad: bookingData.isOver18,
-          imagenes_referencia: bookingData.referenceImages.map(img => ({
-            nombre: img.name,
-            tipo: img.type,
-            tamano_kb: Math.round(img.data.length * 0.75 / 1024) // Aproximación del tamaño
-          })),
-          // Campos adicionales para el CRM
-          notas_admin: `Lead generado automáticamente desde el formulario web. Cliente interesado en ${tattooSizeLabels[bookingData.tattooSize]} en ${bookingData.bodyLocation}.`,
-          fecha_contacto: null,
-          fecha_confirmacion: null
+          notas_admin: `Lead generado automáticamente desde el formulario web. Cliente interesado en ${tattooSizeLabels[bookingData.tattooSize]} en ${bookingData.bodyLocation}.`
         };
+
+        console.log('🔗 BUDIBASE URL:', process.env.BUDIBASE_WEBHOOK_URL);
+        console.log('📤 ENVIANDO A BUDIBASE (ENRIQUECIDO):', JSON.stringify(budibaseData, null, 2));
 
         // Enviar a Budibase
         const budibaseResponse = await fetch(process.env.BUDIBASE_WEBHOOK_URL, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            // Agregar API key si tienes configurada
             ...(process.env.BUDIBASE_API_KEY && {
-              'Authorization': `Bearer ${process.env.BUDIBASE_API_KEY}`
+              'Authorization': `Bearer ${process.env.BUDIBASE_API_KEY}`,
+              'x-budibase-api-key': process.env.BUDIBASE_API_KEY
             })
           },
-          body: JSON.stringify(budibaseData)
+          body: JSON.stringify(budibaseData) // Corregido: Enviar objeto plano
         });
 
+        // --- Depuración Mejorada ---
+        const responseStatus = budibaseResponse.status;
+        const responseText = await budibaseResponse.text();
+        
+        console.log('📥 BUDIBASE RESPONSE STATUS:', responseStatus);
+        console.log('📥 BUDIBASE RESPONSE TEXT:', responseText);
+
         if (!budibaseResponse.ok) {
-          const errorText = await budibaseResponse.text();
-          console.error('Error enviando a Budibase:', errorText);
+          console.error('❌ ERROR AL ENVIAR A BUDIBASE ❌');
+          console.error('STATUS:', responseStatus);
+          console.error('RESPONSE:', responseText);
+          
+          // Loguear el payload que se intentó enviar
+          console.error('PAYLOAD ENVIADO:', JSON.stringify(budibaseData, null, 2));
+
+          // No interrumpir el flujo, pero dejar un registro claro del error.
         } else {
           console.log('✅ Lead enviado a Budibase CRM exitosamente');
+          try {
+            const responseData = JSON.parse(responseText);
+            console.log('📊 Respuesta de Budibase:', responseData);
+          } catch {
+            console.log('📊 Respuesta de Budibase (no es JSON):', responseText);
+          }
         }
       } else {
         console.log('⚠️ BUDIBASE_WEBHOOK_URL no configurado, saltando integración CRM');
       }
 
     } catch (budibaseError) {
-      console.error('❌ Error con Budibase CRM:', budibaseError);
-      // No fallar todo el proceso si Budibase falla
+      console.error('❌ ERROR CRÍTICO CON BUDIBASE CRM ❌', budibaseError);
+      if (budibaseError instanceof Error) {
+        console.error('Stack:', budibaseError.stack);
+      }
     }
 
     // Return successful response
