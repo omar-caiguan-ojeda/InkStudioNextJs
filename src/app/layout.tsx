@@ -2,7 +2,10 @@ import "./globals.css";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "InkStudio - Arte en tu Piel | Estudio de Tatuajes Profesional",
+  title: {
+    default: "InkStudio - Arte en tu Piel | Estudio de Tatuajes Profesional",
+    template: `%s | InkStudio`,
+  },
   description:
     "InkStudio - Estudio de tatuajes profesional especializado en blackwork, fine line, geométrico y realismo. Más de 5 años de experiencia y 500+ tatuajes realizados. Agenda tu cita hoy.",
   keywords: [
@@ -28,7 +31,7 @@ export const metadata: Metadata = {
     title: "InkStudio - Arte en tu Piel | Estudio de Tatuajes Profesional",
     description:
       "Estudio de tatuajes profesional especializado en blackwork, fine line, geométrico y realismo. Más de 5 años de experiencia.",
-    images: ["/tatto_01.jpeg"],
+    images: ["/tatto_011.jpg"],
     siteName: "InkStudio",
   },
   twitter: {
@@ -36,7 +39,7 @@ export const metadata: Metadata = {
     title: "InkStudio - Arte en tu Piel | Estudio de Tatuajes Profesional",
     description:
       "Estudio de tatuajes profesional especializado en blackwork, fine line, geométrico y realismo.",
-    images: ["/tatto_01.jpeg"],
+    images: ["/tatto_011.jpg"],
   },
   metadataBase: new URL("https://inkstudio-tattoo.vercel.app"),
 };

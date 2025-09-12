@@ -104,121 +104,90 @@ export async function POST(request: NextRequest) {
       to: [process.env.ADMIN_EMAIL || 'omar.caiguan@gmail.com'],
       subject: `🎨 Nueva Solicitud de Tatuaje - ${bookingData.name} - ${bookingNumber}`,
       html: `
-        <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f8f9fa;">
-          <!-- Header -->
-          <div style="background: linear-gradient(135deg, #1a1a1a 0%, #374151 100%); color: white; padding: 30px 20px; border-radius: 12px 12px 0 0; text-align: center;">
-            <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
-              <span style="background-color: #dc2626; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 24px;">I</span>
-              <div>
-                <h1 style="margin: 0; font-size: 28px;">INKSTUDIO</h1>
-                <p style="margin: 5px 0 0 0; opacity: 0.9; font-size: 16px;">Nueva Solicitud de Tatuaje</p>
-              </div>
-            </div>
-            <div style="background: rgba(220, 38, 38, 0.2); padding: 15px; border-radius: 8px; margin-top: 20px;">
-              <h2 style="margin: 0; color: #dc2626; font-size: 20px;">Número de Reserva: ${bookingNumber}</h2>
-            </div>
-          </div>
-          
-          <div style="background-color: white; padding: 30px; border-radius: 0 0 12px 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-            
-            <!-- Información Personal -->
-            <div style="background-color: #f8f9fa; padding: 25px; border-radius: 12px; margin: 20px 0; border-left: 4px solid #dc2626;">
-              <h3 style="color: #1a1a1a; margin-top: 0; font-size: 20px; display: flex; align-items: center; gap: 10px;">
-                <span style="background: #dc2626; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px;">👤</span>
-                Información Personal
-              </h3>
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 15px;">
-                <div><strong>Nombre:</strong> ${bookingData.name}</div>
-                <div><strong>Email:</strong> <a href="mailto:${bookingData.email}" style="color: #dc2626;">${bookingData.email}</a></div>
-                <div><strong>Teléfono:</strong> <a href="tel:${bookingData.phone}" style="color: #dc2626;">${bookingData.phone}</a></div>
-                <div><strong>Nos encontró por:</strong> ${howFoundUsLabels[bookingData.howFoundUs] || bookingData.howFoundUs}</div>
-              </div>
-            </div>
-            
-            <!-- Detalles del Tatuaje -->
-            <div style="background-color: #f8f9fa; padding: 25px; border-radius: 12px; margin: 20px 0; border-left: 4px solid #dc2626;">
-              <h3 style="color: #1a1a1a; margin-top: 0; font-size: 20px; display: flex; align-items: center; gap: 10px;">
-                <span style="background: #dc2626; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px;">🎨</span>
-                Detalles del Tatuaje
-              </h3>
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 15px;">
-                <div><strong>Artista preferido:</strong> ${bookingData.preferredArtist}</div>
-                <div><strong>Ubicación:</strong> ${bookingData.bodyLocation}</div>
-                <div><strong>Tamaño:</strong> ${tattooSizeLabels[bookingData.tattooSize] || bookingData.tattooSize}</div>
-                <div><strong>Presupuesto:</strong> ${budgetLabels[bookingData.budgetRange] || bookingData.budgetRange}</div>
-                <div><strong>Estilo:</strong> ${colorStyleLabels[bookingData.colorStyle] || bookingData.colorStyle}</div>
-              </div>
-              
-              <div style="margin-top: 20px;">
-                <strong>Descripción:</strong>
-                <div style="background: white; padding: 15px; border-radius: 8px; margin-top: 10px; border: 1px solid #e5e7eb;">
-                  ${bookingData.description}
-                </div>
-              </div>
-            </div>
-            
-            <!-- Cita Programada -->
-            <div style="background-color: #f8f9fa; padding: 25px; border-radius: 12px; margin: 20px 0; border-left: 4px solid #dc2626;">
-              <h3 style="color: #1a1a1a; margin-top: 0; font-size: 20px; display: flex; align-items: center; gap: 10px;">
-                <span style="background: #dc2626; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px;">📅</span>
-                Cita Solicitada
-              </h3>
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
-                <div><strong>Fecha:</strong> ${formattedDate}</div>
-                <div><strong>Hora:</strong> ${bookingData.time}</div>
-              </div>
-            </div>
-
-            ${bookingData.referenceImages.length > 0 ? `
-            <!-- Imágenes de Referencia -->
-            <div style="background-color: #f8f9fa; padding: 25px; border-radius: 12px; margin: 20px 0; border-left: 4px solid #dc2626;">
-              <h3 style="color: #1a1a1a; margin-top: 0; font-size: 20px; display: flex; align-items: center; gap: 10px;">
-                <span style="background: #dc2626; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px;">🖼️</span>
-                Imágenes de Referencia (${bookingData.referenceImages.length})
-              </h3>
-              <p>Se han adjuntado ${bookingData.referenceImages.length} imagen(es) de referencia a este email.</p>
-              <div style="margin-top: 10px;">
-                ${bookingData.referenceImages.map((img) => 
-                  `<span style="display: inline-block; background: white; padding: 8px 12px; border-radius: 6px; margin: 4px; border: 1px solid #e5e7eb;">📎 ${img.name}</span>`
-                ).join('')}
-              </div>
-            </div>
-            ` : ''}
-            
-            <!-- Términos Aceptados -->
-            <div style="background-color: #f0f9ff; padding: 20px; border-radius: 12px; margin: 20px 0; border: 1px solid #bae6fd;">
-              <h3 style="color: #0369a1; margin-top: 0; font-size: 18px;">✅ Términos Aceptados</h3>
-              <ul style="margin: 10px 0; padding-left: 20px;">
-                <li>Confirmó ser mayor de 18 años</li>
-                <li>Aceptó los términos y condiciones</li>
-                <li>Aceptó la política de privacidad</li>
-              </ul>
-            </div>
-            
-            <!-- Acción Requerida -->
-            <div style="background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%); color: white; padding: 25px; border-radius: 12px; margin: 30px 0; text-align: center;">
-              <h3 style="margin-top: 0; color: white; font-size: 20px;">🚨 ACCIÓN REQUERIDA</h3>
-              <p style="margin: 10px 0; font-size: 16px;">Contactar al cliente dentro de las próximas 4-8 horas para confirmar disponibilidad y finalizar los detalles.</p>
-              <div style="margin-top: 20px;">
-                <a href="mailto:${bookingData.email}" style="background: white; color: #dc2626; padding: 12px 25px; border-radius: 6px; text-decoration: none; font-weight: bold; margin-right: 10px;">📧 Enviar Email</a>
-                <a href="tel:${bookingData.phone}" style="background: rgba(255,255,255,0.2); color: white; padding: 12px 25px; border-radius: 6px; text-decoration: none; font-weight: bold;">📞 Llamar</a>
-              </div>
-            </div>
-            
-            <!-- Footer -->
-            <div style="text-align: center; padding: 20px; color: #6b7280; font-size: 14px; border-top: 1px solid #e5e7eb; margin-top: 30px;">
-              <p><strong>InkStudio - Sistema de Reservas</strong></p>
-              <p>Fecha de solicitud: ${new Date().toLocaleDateString('es-ES', { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-              })}</p>
-            </div>
-          </div>
-        </div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nueva Solicitud de Tatuaje - ${bookingNumber}</title>
+<style>
+  body { margin: 0; padding: 0; background-color: #0f172a; font-family: Arial, sans-serif; }
+  .container { max-width: 600px; margin: 0 auto; background-color: #1e293b; color: #f1f5f9; }
+  .header { padding: 40px 30px; text-align: center; background: linear-gradient(135deg, #1a1a1a 0%, #374151 100%); }
+  .logo { display: inline-block; margin-bottom: 15px; }
+  .content { padding: 30px; }
+  .card { background-color: #0f172a; border-radius: 12px; padding: 25px; margin-bottom: 20px; border: 1px solid #334155; }
+  h1 { color: #f1f5f9; margin: 0; font-size: 24px; }
+  h2 { color: #dc2626; margin-top: 0; font-size: 20px; border-bottom: 1px solid #334155; padding-bottom: 10px; }
+  p { line-height: 1.6; }
+  .booking-number { background-color: rgba(220, 38, 38, 0.2); color: #ef4444; padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 20px; }
+  .footer { text-align: center; padding: 20px; font-size: 12px; color: #64748b; }
+  .button { background-color: #dc2626; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold; }
+  @media screen and (max-width: 600px) {
+    .content { padding: 20px; }
+    .header { padding: 30px 20px; }
+  }
+</style>
+</head>
+<body>
+<table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td align="center" style="padding: 20px 0; background-color: #0f172a;">
+<table class="container" role="presentation" width="600" border="0" cellspacing="0" cellpadding="0">
+  <tr><td class="header">
+    <img src="https://inkstudio-tattoo.vercel.app/icon.png" alt="InkStudio Logo" width="60" class="logo">
+    <h1>INKSTUDIO</h1>
+    <p style="margin: 5px 0 0 0; color: #94a3b8;">Nueva Solicitud de Tatuaje</p>
+  </td></tr>
+  <tr><td class="content">
+    <div class="booking-number"><h2>Número de Reserva: ${bookingNumber}</h2></div>
+    <div class="card">
+      <h2>Información Personal</h2>
+      <p><strong>Nombre:</strong> ${bookingData.name}</p>
+      <p><strong>Email:</strong> <a href="mailto:${bookingData.email}" style="color: #ef4444;">${bookingData.email}</a></p>
+      <p><strong>Teléfono:</strong> <a href="tel:${bookingData.phone}" style="color: #ef4444;">${bookingData.phone}</a></p>
+      <p><strong>Nos encontró por:</strong> ${howFoundUsLabels[bookingData.howFoundUs] || bookingData.howFoundUs}</p>
+    </div>
+    <div class="card">
+      <h2>Detalles del Tatuaje</h2>
+      <p><strong>Artista preferido:</strong> ${bookingData.preferredArtist}</p>
+      <p><strong>Ubicación:</strong> ${bookingData.bodyLocation}</p>
+      <p><strong>Tamaño:</strong> ${tattooSizeLabels[bookingData.tattooSize] || bookingData.tattooSize}</p>
+      <p><strong>Presupuesto:</strong> ${budgetLabels[bookingData.budgetRange] || bookingData.budgetRange}</p>
+      <p><strong>Estilo:</strong> ${colorStyleLabels[bookingData.colorStyle] || bookingData.colorStyle}</p>
+      <p style="margin-top: 20px;"><strong>Descripción:</strong><br>${bookingData.description}</p>
+    </div>
+    <div class="card">
+      <h2>Cita Solicitada</h2>
+      <p><strong>Fecha:</strong> ${formattedDate}</p>
+      <p><strong>Hora:</strong> ${bookingData.time}</p>
+    </div>
+    ${bookingData.referenceImages.length > 0 ? `
+    <div class="card">
+      <h2>Imágenes de Referencia (${bookingData.referenceImages.length})</h2>
+      <p>Las imágenes se han adjuntado a este correo.</p>
+      <ul>${bookingData.referenceImages.map(img => `<li>${img.name}</li>`).join('')}</ul>
+    </div>` : ''}
+    <div class="card" style="background-color: rgba(34, 197, 94, 0.1); border-color: #22c55e;">
+      <h2 style="color: #22c55e;">✅ Términos Aceptados</h2>
+      <ul style="color: #a7f3d0;">
+        <li>Confirmó ser mayor de 18 años</li>
+        <li>Aceptó los términos y condiciones</li>
+        <li>Aceptó la política de privacidad</li>
+      </ul>
+    </div>
+    <div style="text-align: center; margin-top: 30px;">
+      <a href="mailto:${bookingData.email}" class="button">Contactar Cliente</a>
+    </div>
+  </td></tr>
+  <tr><td class="footer">
+    <p>InkStudio - Sistema de Reservas</p>
+    <p>Fecha de solicitud: ${new Date().toLocaleString('es-ES')}</p>
+  </td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>
       `,
       attachments: attachments.length > 0 ? attachments : undefined
     };
@@ -229,119 +198,75 @@ export async function POST(request: NextRequest) {
       to: [bookingData.email],
       subject: `🎨 Solicitud Recibida - InkStudio - ${bookingNumber}`,
       html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f8f9fa;">
-          <!-- Header -->
-          <div style="background: linear-gradient(135deg, #1a1a1a 0%, #374151 100%); color: white; padding: 30px 20px; border-radius: 12px 12px 0 0; text-align: center;">
-            <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
-              <span style="background-color: #dc2626; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 24px;">I</span>
-              <div>
-                <h1 style="margin: 0; font-size: 28px;">INKSTUDIO</h1>
-                <p style="margin: 5px 0 0 0; opacity: 0.9; font-size: 16px;">Arte en tu Piel</p>
-              </div>
-            </div>
-          </div>
-          
-          <div style="background-color: white; padding: 30px; border-radius: 0 0 12px 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-            
-            <div style="text-align: center; margin-bottom: 30px;">
-              <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 40px;">✓</div>
-              <h2 style="color: #dc2626; margin: 0 0 10px 0;">¡Solicitud Recibida!</h2>
-              <p style="color: #6b7280; font-size: 18px;">Hola <strong>${bookingData.name}</strong>, hemos recibido tu solicitud de tatuaje.</p>
-            </div>
-
-            <!-- Booking Number -->
-            <div style="background: linear-gradient(135deg, rgba(220, 38, 38, 0.1) 0%, rgba(220, 38, 38, 0.05) 100%); border: 2px solid rgba(220, 38, 38, 0.3); border-radius: 12px; padding: 20px; margin: 25px 0; text-align: center;">
-              <p style="margin: 0 0 10px 0; color: #6b7280; font-size: 14px; font-weight: 600;">TU NÚMERO DE RESERVA</p>
-              <h3 style="margin: 0; color: #dc2626; font-size: 28px; font-weight: 800; font-family: 'Courier New', monospace; letter-spacing: 2px;">${bookingNumber}</h3>
-              <p style="margin: 10px 0 0 0; color: #6b7280; font-size: 12px;">Guarda este número para futuras referencias</p>
-            </div>
-            
-            <!-- Resumen de la Solicitud -->
-            <div style="background-color: #f8f9fa; padding: 25px; border-radius: 12px; margin: 25px 0;">
-              <h3 style="color: #1a1a1a; margin-top: 0; margin-bottom: 20px; font-size: 20px;">📋 Resumen de tu Solicitud</h3>
-              
-              <div style="display: grid; gap: 15px;">
-                <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #e5e7eb;">
-                  <span style="color: #6b7280;">Artista preferido:</span>
-                  <span style="font-weight: 600;">${bookingData.preferredArtist}</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #e5e7eb;">
-                  <span style="color: #6b7280;">Ubicación:</span>
-                  <span style="font-weight: 600;">${bookingData.bodyLocation}</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #e5e7eb;">
-                  <span style="color: #6b7280;">Tamaño:</span>
-                  <span style="font-weight: 600;">${tattooSizeLabels[bookingData.tattooSize] || bookingData.tattooSize}</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #e5e7eb;">
-                  <span style="color: #6b7280;">Presupuesto:</span>
-                  <span style="font-weight: 600; color: #dc2626;">${budgetLabels[bookingData.budgetRange] || bookingData.budgetRange}</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #e5e7eb;">
-                  <span style="color: #6b7280;">Fecha solicitada:</span>
-                  <span style="font-weight: 600;">${formattedDate}</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; padding: 10px 0;">
-                  <span style="color: #6b7280;">Hora solicitada:</span>
-                  <span style="font-weight: 600;">${bookingData.time}</span>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Próximos Pasos -->
-            <div style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 25px; border-radius: 12px; margin: 25px 0;">
-              <h3 style="margin-top: 0; color: white; font-size: 20px;">🚀 Próximos Pasos</h3>
-              <div style="display: grid; gap: 15px; margin-top: 15px;">
-                <div style="display: flex; align-items: center; gap: 15px;">
-                  <span style="background: rgba(255,255,255,0.2); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">1</span>
-                  <span>Revisaremos tu solicitud en detalle</span>
-                </div>
-                <div style="display: flex; align-items: center; gap: 15px;">
-                  <span style="background: rgba(255,255,255,0.2); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">2</span>
-                  <span>Te contactaremos dentro de 4-8 horas</span>
-                </div>
-                <div style="display: flex; align-items: center; gap: 15px;">
-                  <span style="background: rgba(255,255,255,0.2); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">3</span>
-                  <span>Confirmaremos fecha, hora y detalles finales</span>
-                </div>
-                <div style="display: flex; align-items: center; gap: 15px;">
-                  <span style="background: rgba(255,255,255,0.2); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">4</span>
-                  <span>Te enviaremos las instrucciones de preparación</span>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Información Importante -->
-            <div style="background: #fef3c7; border: 1px solid #fcd34d; border-radius: 12px; padding: 20px; margin: 25px 0;">
-              <h4 style="color: #92400e; margin-top: 0; display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 20px;">⚠️</span>
-                Información Importante
-              </h4>
-              <ul style="margin: 10px 0; padding-left: 20px; color: #92400e;">
-                <li style="margin-bottom: 8px;">Se requiere un depósito no reembolsable para asegurar tu reserva</li>
-                <li style="margin-bottom: 8px;">Las citas requieren aviso mínimo de 48 horas para reprogramación</li>
-                <li style="margin-bottom: 8px;">Debes venir bien hidratado y haber comido antes de la sesión</li>
-                <li>Evita el alcohol y medicamentos anticoagulantes 24 horas antes</li>
-              </ul>
-            </div>
-            
-            <!-- Contacto -->
-            <div style="border-top: 2px solid #f0f0f0; padding-top: 25px; margin-top: 30px; text-align: center;">
-              <h4 style="color: #1a1a1a; margin-bottom: 15px;">¿Preguntas? ¡Contáctanos!</h4>
-              <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;">
-                <a href="mailto:info@inkstudio.com" style="color: #dc2626; text-decoration: none; font-weight: 600;">📧 info@inkstudio.com</a>
-                <a href="tel:+1234567890" style="color: #dc2626; text-decoration: none; font-weight: 600;">📞 +1 (234) 567-8890</a>
-              </div>
-              <p style="color: #6b7280; margin: 0;">📍 123 Arte Street, Ciudad</p>
-            </div>
-            
-            <!-- Footer -->
-            <div style="text-align: center; padding: 20px; color: #9ca3af; font-size: 14px; border-top: 1px solid #e5e7eb; margin-top: 25px;">
-              <p style="margin: 0 0 10px 0;"><strong>InkStudio - Arte en tu Piel</strong></p>
-              <p style="margin: 0;">¡Estamos emocionados de crear tu próxima obra de arte!</p>
-            </div>
-          </div>
-        </div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solicitud Recibida - ${bookingNumber}</title>
+<style>
+  body { margin: 0; padding: 0; background-color: #0f172a; font-family: Arial, sans-serif; }
+  .container { max-width: 600px; margin: 0 auto; background-color: #1e293b; color: #f1f5f9; }
+  .header { padding: 40px 30px; text-align: center; background: linear-gradient(135deg, #1a1a1a 0%, #374151 100%); }
+  .logo { display: inline-block; margin-bottom: 15px; }
+  .content { padding: 30px; }
+  .card { background-color: #0f172a; border-radius: 12px; padding: 25px; margin-bottom: 20px; border: 1px solid #334155; }
+  h1 { color: #f1f5f9; margin: 0; font-size: 24px; }
+  h2 { color: #dc2626; margin-top: 0; font-size: 20px; }
+  p { line-height: 1.6; color: #cbd5e1; }
+  .booking-number { background-color: rgba(220, 38, 38, 0.2); color: #ef4444; padding: 20px; border-radius: 12px; text-align: center; margin: 25px 0; }
+  .footer { text-align: center; padding: 20px; font-size: 12px; color: #64748b; }
+  .button { background-color: #dc2626; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold; }
+  @media screen and (max-width: 600px) {
+    .content { padding: 20px; }
+    .header { padding: 30px 20px; }
+  }
+</style>
+</head>
+<body>
+<table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr><td align="center" style="padding: 20px 0; background-color: #0f172a;">
+<table class="container" role="presentation" width="600" border="0" cellspacing="0" cellpadding="0">
+  <tr><td class="header">
+    <img src="https://inkstudio-tattoo.vercel.app/icon.png" alt="InkStudio Logo" width="60" class="logo">
+    <h1>INKSTUDIO</h1>
+    <p style="margin: 5px 0 0 0; color: #94a3b8;">Arte en tu Piel</p>
+  </td></tr>
+  <tr><td class="content">
+    <h2 style="text-align: center;">¡Solicitud Recibida!</h2>
+    <p style="text-align: center;">Hola <strong>${bookingData.name}</strong>, hemos recibido tu solicitud de tatuaje. ¡Gracias por confiar en nosotros!</p>
+    <div class="booking-number">
+      <p style="margin: 0 0 10px 0; color: #f1f5f9; font-size: 14px;">TU NÚMERO DE RESERVA</p>
+      <h3 style="margin: 0; color: #ef4444; font-size: 28px; font-family: 'Courier New', monospace;">${bookingNumber}</h3>
+    </div>
+    <div class="card">
+      <h3>📋 Resumen de tu Solicitud</h3>
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr><td style="padding: 10px 0; border-bottom: 1px solid #334155;">Artista preferido:</td><td align="right" style="font-weight: bold;">${bookingData.preferredArtist}</td></tr>
+        <tr><td style="padding: 10px 0; border-bottom: 1px solid #334155;">Tamaño:</td><td align="right" style="font-weight: bold;">${tattooSizeLabels[bookingData.tattooSize] || bookingData.tattooSize}</td></tr>
+        <tr><td style="padding: 10px 0; border-bottom: 1px solid #334155;">Fecha solicitada:</td><td align="right" style="font-weight: bold;">${formattedDate}</td></tr>
+        <tr><td style="padding: 10px 0;">Hora solicitada:</td><td align="right" style="font-weight: bold;">${bookingData.time}</td></tr>
+      </table>
+    </div>
+    <div class="card" style="background-color: rgba(59, 130, 246, 0.1); border-color: #3b82f6;">
+      <h3 style="color: #60a5fa;">🚀 Próximos Pasos</h3>
+      <p>1. <strong>Revisión:</strong> Nuestro equipo revisará tu solicitud.</p>
+      <p>2. <strong>Contacto:</strong> Te contactaremos en las próximas 4-8 horas para confirmar los detalles.</p>
+      <p>3. <strong>Confirmación:</strong> Finalizaremos la fecha, hora y te enviaremos las instrucciones para el depósito.</p>
+    </div>
+    <div style="text-align: center; margin-top: 30px;">
+      <a href="https://inkstudio-tattoo.vercel.app" class="button">Visitar Nuestro Sitio</a>
+    </div>
+  </td></tr>
+  <tr><td class="footer">
+    <p><strong>InkStudio - Arte en tu Piel</strong></p>
+    <p>📍 123 Arte Street, Ciudad | 📧 info@inkstudio.com</p>
+  </td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>
       `
     };
 
