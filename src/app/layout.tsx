@@ -51,6 +51,31 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
+      <head>
+        <script type="application/ld+json">
+          {
+            JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "TattooParlor",
+              "name": "InkStudio",
+              "description": "Estudio de tatuajes profesional especializado en blackwork, fine line, geométrico y realismo. Más de 5 años de experiencia y 500+ tatuajes realizados.",
+              "url": "https://inkstudio-tattoo.vercel.app/",
+              "logo": "https://inkstudio-tattoo.vercel.app/icon.png",
+              "image": "https://inkstudio-tattoo.vercel.app/tatto_011.jpg",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Av. Libertador 1234",
+                "addressLocality": "Buenos Aires",
+                "postalCode": "C1425",
+                "addressCountry": "AR"
+              },
+              "telephone": "+54-11-4567-8900",
+              "openingHours": "Mo-Sa 10:00-20:00",
+              "priceRange": "$$"
+            })
+          }
+        </script>
+      </head>
       <body>{children}</body>
     </html>
   );

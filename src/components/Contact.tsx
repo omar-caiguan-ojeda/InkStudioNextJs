@@ -187,7 +187,7 @@ const Contact: React.FC<ContactProps> = ({ language = 'es' }) => {
           font-size: 2.5rem;
           font-weight: 800;
           margin-bottom: 1rem;
-          background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+          background: linear-gradient(135deg, #DC2626 0%, #FF3737 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
@@ -233,15 +233,15 @@ const Contact: React.FC<ContactProps> = ({ language = 'es' }) => {
         }
 
         .contact-item:hover {
-          background: rgba(255, 107, 53, 0.1);
-          border-color: rgba(255, 107, 53, 0.3);
+          background: rgba(220, 38, 38, 0.1);
+          border-color: rgba(220, 38, 38, 0.3);
           transform: translateY(-2px);
         }
 
         .contact-icon {
           width: 40px;
           height: 40px;
-          background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+          background: linear-gradient(135deg, #DC2626 0%, #FF3737 100%);
           border-radius: 50%;
           display: flex;
           align-items: center;
@@ -259,7 +259,7 @@ const Contact: React.FC<ContactProps> = ({ language = 'es' }) => {
         .contact-label {
           font-size: 0.9rem;
           font-weight: 600;
-          color: var(--accent-color);
+          color: #DC2626;
         }
 
         .contact-value {
@@ -277,8 +277,8 @@ const Contact: React.FC<ContactProps> = ({ language = 'es' }) => {
         .social-link {
           width: 50px;
           height: 50px;
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          background: rgba(255, 255, 255, 0.06);
+          border: 1px solid rgba(255, 255, 255, 0.12);
           border-radius: 50%;
           display: flex;
           align-items: center;
@@ -288,6 +288,7 @@ const Contact: React.FC<ContactProps> = ({ language = 'es' }) => {
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           position: relative;
           overflow: hidden;
+          backdrop-filter: blur(6px);
         }
 
         .social-link::before {
@@ -297,30 +298,34 @@ const Contact: React.FC<ContactProps> = ({ language = 'es' }) => {
           left: 0;
           width: 100%;
           height: 100%;
-          background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+          background: linear-gradient(135deg, #DC2626 0%, #FF3737 100%);
           opacity: 0;
           transition: opacity 0.3s ease;
+          pointer-events: none;
+          z-index: 0;
         }
 
         .social-link:hover::before {
-          opacity: 1;
+          opacity: 0.35;
         }
 
         .social-link:hover {
           transform: translateY(-3px) scale(1.1);
-          box-shadow: 0 10px 25px rgba(255, 107, 53, 0.3);
-          border-color: #FF6B35;
+          box-shadow: 0 10px 25px rgba(220, 38, 38, 0.3);
+          border-color: #DC2626;
           color: white;
         }
 
         .social-link svg {
           position: relative;
           z-index: 1;
-          transition: transform 0.3s ease;
+          transition: transform 0.3s ease, filter 0.3s ease, color 0.3s ease;
         }
 
         .social-link:hover svg {
-          transform: scale(1.1);
+          transform: scale(1.12);
+          color: #FFFFFF;
+          filter: drop-shadow(0 0 6px rgba(220, 38, 38, 0.6));
         }
 
         .map-container {
@@ -332,8 +337,8 @@ const Contact: React.FC<ContactProps> = ({ language = 'es' }) => {
         }
 
         .map-container:hover {
-          border-color: rgba(255, 107, 53, 0.3);
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+          border-color: #DC2626;
+          box-shadow: 0 0 15px rgba(220, 38, 38, 0.5), 0 0 30px rgba(220, 38, 38, 0.3);
         }
 
         .map-container iframe {

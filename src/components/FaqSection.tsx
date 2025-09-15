@@ -25,8 +25,25 @@ const faqData = [
 ];
 
 export default function FaqSection() {
+  const faqLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqData.map(item => ({
+      "@type": "Question",
+      "name": item.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": item.answer
+      }
+    }))
+  };
+
   return (
     <section id="faq" className={styles.faqContainer}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
+      />
       <h2 className={styles.title}>Preguntas Frecuentes (FAQ)</h2>
       <div className={styles.faqList}>
         {faqData.map((item, index) => (

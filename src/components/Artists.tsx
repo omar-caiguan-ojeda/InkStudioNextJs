@@ -26,8 +26,25 @@ const artistsData = [
 ];
 
 const Artists = () => {
+  const artistsLd = artistsData.map(artist => ({
+    "@type": "Person",
+    "name": artist.name,
+    "jobTitle": "Artista Tatuador",
+    "worksFor": {
+      "@type": "TattooParlor",
+      "name": "InkStudio"
+    },
+    "url": artist.instagramUrl,
+    "image": `https://inkstudio-tattoo.vercel.app${artist.imageSrc}`,
+    "sameAs": [artist.instagramUrl]
+  }));
+
   return (
     <section id="artistas" className={styles.artistsSection}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(artistsLd) }}
+      />
       <div className={styles.container}>
         <h2 className={styles.title}>Nuestros Artistas</h2>
         <p className={styles.subtitle}>Conoce al talentoso equipo que dará vida a tus ideas.</p>
