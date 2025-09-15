@@ -69,7 +69,7 @@ const Contact: React.FC<ContactProps> = ({ language = 'es' }) => {
   ];
 
   return (
-    <section className="contact-section" id="contact">
+    <section className="contact-section" id="contacto">
       <div className="contact-container">
         <div className="contact-header">
           <h2 className="contact-title">{contactData.title}</h2>

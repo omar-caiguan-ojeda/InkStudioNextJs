@@ -36,10 +36,12 @@ export default function Footer() {
             <h3 className="footer-title">Navegación</h3>
             <ul className="footer-links">
               <li><Link href="#about-us">Quiénes Somos</Link></li>
+              <li><Link href="#artistas">Artistas</Link></li>
               <li><Link href="#portfolio">Portfolio</Link></li>
               <li><Link href="#servicios">Servicios</Link></li>
               <li><Link href="#booking">Agendar Cita</Link></li>
               <li><Link href="#contacto">Contacto</Link></li>
+              <li><Link href="#faq">Preguntas Frecuentes</Link></li>
             </ul>
           </div>
 

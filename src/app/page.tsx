@@ -4,10 +4,12 @@ import { useState, useEffect } from "react";
 import Header from "../components/Header";
 import HeroSection from "../components/HeroSection";
 import About from "../components/About";
+import Artists from "../components/Artists";
 import Carrousel from "../components/Carrousel";
 import Services from "../components/Services";
 import BookingForm from "../components/BookingForm";
 import Contact from "../components/Contact";
+import FaqSection from "../components/FaqSection";
 import Footer from "../components/Footer";
 
 export default function HomePage() {
@@ -94,6 +96,11 @@ export default function HomePage() {
         <About />
       </div>
 
+      {/* Artists Section */}
+      <div className="scroll-animate">
+        <Artists />
+      </div>
+
       {/* Portfolio Section */}
       <div className="scroll-animate">
         <Carrousel />
@@ -112,6 +119,11 @@ export default function HomePage() {
       {/* Contact Section */}
       <div className="scroll-animate">
         <Contact language={language} />
+      </div>
+
+      {/* FAQ Section */}
+      <div className="scroll-animate">
+        <FaqSection />
       </div>
 
       {/* Footer */}

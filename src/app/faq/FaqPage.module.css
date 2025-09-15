@@ -1,0 +1,19 @@
+.faqContainer {
+  max-width: 800px;
+  margin: 8rem auto 4rem auto; /* Add more margin at the top */
+  padding: 2rem;
+  background-color: var(--background-dark); /* Use dark background variable */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: var(--primary-color);
+}
+
+.faqList {
+  margin-top: 1rem;
+}

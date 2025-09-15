@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { NavbarDynamicText } from './NavbarDynamicText';
 
 interface HeaderProps {
@@ -29,17 +30,21 @@ const Header: React.FC<HeaderProps> = ({ language }) => {
   const navItems = language === 'es' 
     ? [
         { href: '#about-us', label: 'Quiénes Somos' },
+        { href: '#artistas', label: 'Artistas' },
         { href: '#portfolio', label: 'Portfolio' },
         { href: '#servicios', label: 'Servicios' },
         { href: '#booking', label: 'Agendar' },
-        { href: '#contacto', label: 'Contacto' }
+        { href: '#contacto', label: 'Contacto' },
+        { href: '#faq', label: 'Preguntas Frecuentes' }
       ]
     : [
         { href: '#about-us', label: 'About Us' },
+        { href: '#artistas', label: 'Artists' },
         { href: '#portfolio', label: 'Portfolio' },
         { href: '#services', label: 'Services' },
         { href: '#booking', label: 'Book' },
-        { href: '#contact', label: 'Contact' }
+        { href: '#contact', label: 'Contact' },
+        { href: '#faq', label: 'FAQ' }
       ];
 
   const ctaText = language === 'es' ? 'Agendar Cita' : 'Book Appointment';
@@ -61,12 +66,27 @@ const Header: React.FC<HeaderProps> = ({ language }) => {
           </div>
 
           <div className="nav-menu">
-            {navItems.map((item, index) => (
-              <a key={index} href={item.href} className="nav-link">
-                <span>{item.label}</span>
-                <div className="nav-underline"></div>
-              </a>
-            ))}
+            {navItems.map((item, index) => {
+              const isInternalLink = item.href.startsWith('/');
+
+              if (isInternalLink) {
+                return (
+                  <Link key={index} href={item.href} legacyBehavior>
+                    <a className="nav-link">
+                      <span>{item.label}</span>
+                      <div className="nav-underline"></div>
+                    </a>
+                  </Link>
+                );
+              }
+
+              return (
+                <a key={index} href={item.href} className="nav-link">
+                  <span>{item.label}</span>
+                  <div className="nav-underline"></div>
+                </a>
+              );
+            })}
           </div>
 
           <button className="cta-button" onClick={scrollToBooking}>

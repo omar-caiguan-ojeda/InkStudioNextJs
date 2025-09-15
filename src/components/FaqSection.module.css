@@ -1,0 +1,18 @@
+.faqContainer {
+  max-width: 800px;
+  margin: 4rem auto;
+  padding: 2rem;
+  background-color: var(--background-dark);
+  border-radius: 8px;
+}
+
+.title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: var(--primary-color);
+}
+
+.faqList {
+  margin-top: 1rem;
+}
