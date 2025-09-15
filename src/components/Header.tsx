@@ -34,8 +34,8 @@ const Header: React.FC<HeaderProps> = ({ language }) => {
         { href: '#portfolio', label: 'Portfolio' },
         { href: '#servicios', label: 'Servicios' },
         //{ href: '#booking', label: 'Agendar' },
+        { href: '#faq', label: 'FAQ' },
         { href: '#contacto', label: 'Contacto' },
-        { href: '#faq', label: 'FAQ' }
       ]
     : [
         { href: '#about-us', label: 'About Us' },
@@ -43,8 +43,8 @@ const Header: React.FC<HeaderProps> = ({ language }) => {
         { href: '#portfolio', label: 'Portfolio' },
         { href: '#services', label: 'Services' },
         //{ href: '#booking', label: 'Book' },
+        { href: '#faq', label: 'FAQ' },
         { href: '#contact', label: 'Contact' },
-        { href: '#faq', label: 'FAQ' }
       ];
 
   const ctaText = language === 'es' ? 'Agendar Cita' : 'Book Appointment';
