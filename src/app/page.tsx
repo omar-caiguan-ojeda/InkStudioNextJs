@@ -111,9 +111,9 @@ export default function HomePage() {
         <Services />
       </div>
 
-      {/* Booking Section */}
-      <div className="scroll-animate booking-container" id="booking">
-        <BookingForm />
+      {/* FAQ Section */}
+      <div className="scroll-animate">
+        <FaqSection />
       </div>
 
       {/* Contact Section */}
@@ -121,9 +121,9 @@ export default function HomePage() {
         <Contact language={language} />
       </div>
 
-      {/* FAQ Section */}
-      <div className="scroll-animate">
-        <FaqSection />
+      {/* Booking Section */}
+      <div className="scroll-animate booking-container" id="booking">
+        <BookingForm />
       </div>
 
       {/* Footer */}

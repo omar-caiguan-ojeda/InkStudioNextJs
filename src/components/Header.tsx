@@ -33,16 +33,16 @@ const Header: React.FC<HeaderProps> = ({ language }) => {
         { href: '#artistas', label: 'Artistas' },
         { href: '#portfolio', label: 'Portfolio' },
         { href: '#servicios', label: 'Servicios' },
-        { href: '#booking', label: 'Agendar' },
+        //{ href: '#booking', label: 'Agendar' },
         { href: '#contacto', label: 'Contacto' },
-        { href: '#faq', label: 'Preguntas Frecuentes' }
+        { href: '#faq', label: 'FAQ' }
       ]
     : [
         { href: '#about-us', label: 'About Us' },
         { href: '#artistas', label: 'Artists' },
         { href: '#portfolio', label: 'Portfolio' },
         { href: '#services', label: 'Services' },
-        { href: '#booking', label: 'Book' },
+        //{ href: '#booking', label: 'Book' },
         { href: '#contact', label: 'Contact' },
         { href: '#faq', label: 'FAQ' }
       ];
