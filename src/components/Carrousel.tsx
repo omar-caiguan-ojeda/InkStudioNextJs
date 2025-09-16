@@ -3,6 +3,12 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 
+type Lang = 'es' | 'en';
+
+interface CarouselProps {
+  language?: Lang;
+}
+
 const portfolioImages = [
   {
     src: "/tatto_007.jpg",
@@ -28,7 +34,7 @@ const portfolioImages = [
     category: "Realismo",
     description: "Arte hiperrealista en piel"
   },
-    {
+  {
     src: "/tatto_011.jpg", 
     alt: "Tatuaje Fine Line",
     category: "Fine Line",
@@ -72,19 +78,29 @@ const portfolioImages = [
   }
 ];
 
-export default function Carousel() {
+export default function Carousel({ language = 'es' }: CarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
+  const t = {
+    title: language === 'en' ? 'Portfolio' : 'Nuestros Trabajos',
+    subtitle:
+      language === 'en'
+        ? 'Explore some of our best designs and completed pieces'
+        : 'Explora algunos de nuestros mejores diseños y trabajos realizados',
+    cta: language === 'en' ? 'See More' : 'Ver Más',
+    prev: language === 'en' ? 'Previous image' : 'Imagen anterior',
+    next: language === 'en' ? 'Next image' : 'Siguiente imagen',
+    goTo: (i: number) => (language === 'en' ? `Go to image ${i}` : `Ir a imagen ${i}`),
+  };
+
   useEffect(() => {
     if (!isAutoPlaying) return;
-    
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => 
         prevIndex === portfolioImages.length - 1 ? 0 : prevIndex + 1
       );
     }, 4000);
-
     return () => clearInterval(interval);
   }, [isAutoPlaying]);
 
@@ -106,9 +122,9 @@ export default function Carousel() {
   return (
     <section id="portfolio" className="portfolio-section">
       <div className="portfolio-container">
-        <h2 className="portfolio-title">Nuestros Trabajos</h2>
+        <h2 className="portfolio-title">{t.title}</h2>
         <p className="portfolio-subtitle">
-          Explora algunos de nuestros mejores diseños y trabajos realizados
+          {t.subtitle}
         </p>
         
         <div className="carousel-container">
@@ -116,7 +132,7 @@ export default function Carousel() {
             <button 
               className="carousel-btn carousel-btn-prev"
               onClick={goToPrevious}
-              aria-label="Imagen anterior"
+              aria-label={t.prev}
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -149,7 +165,7 @@ export default function Carousel() {
             <button 
               className="carousel-btn carousel-btn-next"
               onClick={goToNext}
-              aria-label="Siguiente imagen"
+              aria-label={t.next}
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -163,13 +179,13 @@ export default function Carousel() {
                 key={index}
                 className={`carousel-indicator ${index === currentIndex ? 'active' : ''}`}
                 onClick={() => goToSlide(index)}
-                aria-label={`Ir a imagen ${index + 1}`}
+                aria-label={t.goTo(index + 1)}
               />
             ))}
           </div>
 
           <button className="portfolio-cta">
-            <span>Ver Más</span>
+            <span>{t.cta}</span>
           </button>
         </div>
       </div>

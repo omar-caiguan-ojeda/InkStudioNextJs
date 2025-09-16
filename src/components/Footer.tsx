@@ -1,6 +1,33 @@
 import Link from "next/link";
 
-export default function Footer() {
+interface FooterProps {
+  language?: 'es' | 'en';
+}
+
+export default function Footer({ language = 'es' }: FooterProps) {
+  const t = {
+    servicesTitle: language === 'en' ? 'Services' : 'Servicios',
+    navTitle: language === 'en' ? 'Navigation' : 'Navegación',
+    contactTitle: language === 'en' ? 'Contact' : 'Contacto',
+    scheduleTitle: language === 'en' ? 'Hours' : 'Horarios',
+    smallTattoo: language === 'en' ? 'Small Tattoo' : 'Tatuaje Pequeño',
+    mediumTattoo: language === 'en' ? 'Medium Tattoo' : 'Tatuaje Mediano',
+    largeTattoo: language === 'en' ? 'Large Tattoo' : 'Tatuaje Grande',
+    coverUp: 'Cover-Up',
+    designConsult: language === 'en' ? 'Design Consultation' : 'Consulta de Diseño',
+    about: language === 'en' ? 'About Us' : 'Quiénes Somos',
+    artists: language === 'en' ? 'Artists' : 'Artistas',
+    portfolio: 'Portfolio',
+    services: language === 'en' ? 'Services' : 'Servicios',
+    book: language === 'en' ? 'Book Appointment' : 'Agendar Cita',
+    contact: language === 'en' ? 'Contact' : 'Contacto',
+    faq: 'FAQ',
+    monFri: language === 'en' ? 'Mon - Fri:' : 'Lun - Vie:',
+    sat: language === 'en' ? 'Saturday:' : 'Sábado:',
+    sun: language === 'en' ? 'Sunday:' : 'Domingo:',
+    closed: language === 'en' ? 'Closed' : 'Cerrado',
+  };
+
   return (
     <footer id="contacto" className="footer">
       <div className="footer-container">
@@ -22,31 +49,31 @@ export default function Footer() {
           </div>
 
           <div className="footer-section">
-            <h3 className="footer-title">Servicios</h3>
+            <h3 className="footer-title">{t.servicesTitle}</h3>
             <ul className="footer-links">
-              <li><Link href="#servicios">Tatuaje Pequeño</Link></li>
-              <li><Link href="#servicios">Tatuaje Mediano</Link></li>
-              <li><Link href="#servicios">Tatuaje Grande</Link></li>
-              <li><Link href="#servicios">Cover-Up</Link></li>
-              <li><Link href="#servicios">Consulta de Diseño</Link></li>
+              <li><Link href="#servicios">{t.smallTattoo}</Link></li>
+              <li><Link href="#servicios">{t.mediumTattoo}</Link></li>
+              <li><Link href="#servicios">{t.largeTattoo}</Link></li>
+              <li><Link href="#servicios">{t.coverUp}</Link></li>
+              <li><Link href="#servicios">{t.designConsult}</Link></li>
             </ul>
           </div>
 
           <div className="footer-section">
-            <h3 className="footer-title">Navegación</h3>
+            <h3 className="footer-title">{t.navTitle}</h3>
             <ul className="footer-links">
-              <li><Link href="#about-us">Quiénes Somos</Link></li>
-              <li><Link href="#artistas">Artistas</Link></li>
-              <li><Link href="#portfolio">Portfolio</Link></li>
-              <li><Link href="#servicios">Servicios</Link></li>
-              <li><Link href="#booking">Agendar Cita</Link></li>
-              <li><Link href="#contacto">Contacto</Link></li>
-              <li><Link href="#faq">Preguntas Frecuentes</Link></li>
+              <li><Link href="#about-us">{t.about}</Link></li>
+              <li><Link href="#artistas">{t.artists}</Link></li>
+              <li><Link href="#portfolio">{t.portfolio}</Link></li>
+              <li><Link href="#servicios">{t.services}</Link></li>
+              <li><Link href="#booking">{t.book}</Link></li>
+              <li><Link href="#contacto">{t.contact}</Link></li>
+              <li><Link href="#faq">{t.faq}</Link></li>
             </ul>
           </div>
 
           <div className="footer-section">
-            <h3 className="footer-title">Contacto</h3>
+            <h3 className="footer-title">{t.contactTitle}</h3>
             <div className="contact-info">
               <div className="contact-item">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -72,19 +99,19 @@ export default function Footer() {
           </div>
 
           <div className="footer-section">
-            <h3 className="footer-title">Horarios</h3>
+            <h3 className="footer-title">{t.scheduleTitle}</h3>
             <div className="schedule">
               <div className="schedule-item">
-                <span>Lun - Vie:</span>
+                <span>{t.monFri}</span>
                 <span>9:00 AM - 8:00 PM</span>
               </div>
               <div className="schedule-item">
-                <span>Sábado:</span>
+                <span>{t.sat}</span>
                 <span>10:00 AM - 6:00 PM</span>
               </div>
               <div className="schedule-item">
-                <span>Domingo:</span>
-                <span>Cerrado</span>
+                <span>{t.sun}</span>
+                <span>{t.closed}</span>
               </div>
             </div>
           </div>

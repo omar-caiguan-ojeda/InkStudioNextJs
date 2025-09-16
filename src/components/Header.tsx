@@ -44,7 +44,7 @@ const Header: React.FC<HeaderProps> = ({ language }) => {
         { href: '#services', label: 'Services' },
         //{ href: '#booking', label: 'Book' },
         { href: '#faq', label: 'FAQ' },
-        { href: '#contact', label: 'Contact' },
+        { href: '#contacto', label: 'Contact' },
       ];
 
   const ctaText = language === 'es' ? 'Agendar Cita' : 'Book Appointment';

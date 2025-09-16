@@ -67,19 +67,33 @@ export default function HomePage() {
     };
   }, []);
 
+  // Load saved language on first mount
+  useEffect(() => {
+    const saved = typeof window !== 'undefined' ? localStorage.getItem('lang') : null;
+    if (saved === 'en' || saved === 'es') setLanguage(saved);
+  }, []);
+
   return (
     <>
-      {/* Language Toggle (opcional para futuro uso) */}
-      <div className="language-toggle">
-        <button 
-          onClick={() => setLanguage('es')} 
-          className={language === 'es' ? 'active' : ''}
+      {/* Language Toggle */}
+      <div className="language-toggle" role="group" aria-label="Language selector">
+        <button
+          onClick={() => {
+            setLanguage('es');
+            if (typeof window !== 'undefined') localStorage.setItem('lang', 'es');
+          }}
+          aria-pressed={language === 'es'}
+          className={`lang-btn ${language === 'es' ? 'active' : ''}`}
         >
           ES
         </button>
-        <button 
-          onClick={() => setLanguage('en')} 
-          className={language === 'en' ? 'active' : ''}
+        <button
+          onClick={() => {
+            setLanguage('en');
+            if (typeof window !== 'undefined') localStorage.setItem('lang', 'en');
+          }}
+          aria-pressed={language === 'en'}
+          className={`lang-btn ${language === 'en' ? 'active' : ''}`}
         >
           EN
         </button>
@@ -93,27 +107,27 @@ export default function HomePage() {
 
       {/* About Section */}
       <div className="scroll-animate">
-        <About />
+        <About language={language} />
       </div>
 
       {/* Artists Section */}
       <div className="scroll-animate">
-        <Artists />
+        <Artists language={language} />
       </div>
 
       {/* Portfolio Section */}
       <div className="scroll-animate">
-        <Carrousel />
+        <Carrousel language={language} />
       </div>
 
       {/* Services Section */}
       <div className="scroll-animate">
-        <Services />
+        <Services language={language} />
       </div>
 
       {/* FAQ Section */}
       <div className="scroll-animate">
-        <FaqSection />
+        <FaqSection language={language} />
       </div>
 
       {/* Contact Section */}
@@ -127,7 +141,43 @@ export default function HomePage() {
       </div>
 
       {/* Footer */}
-      <Footer />
+      <Footer language={language} />
+
+      {/* Inline styles for the floating language toggle */}
+      <style jsx>{`
+        .language-toggle {
+          position: fixed;
+          top: 80px; /* place below fixed header */
+          right: 16px;
+          display: inline-flex;
+          gap: 8px;
+          padding: 6px;
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.06);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          backdrop-filter: blur(8px);
+          z-index: 10000; /* above header */
+        }
+        .lang-btn {
+          appearance: none;
+          border: none;
+          padding: 6px 10px;
+          border-radius: 999px;
+          font-weight: 700;
+          font-size: 12px;
+          letter-spacing: 0.5px;
+          color: var(--text-light);
+          background: transparent;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+        .lang-btn:hover { transform: translateY(-1px); }
+        .lang-btn.active {
+          background: linear-gradient(135deg, #DC2626 0%, #FF3737 100%);
+          color: #fff;
+          box-shadow: 0 6px 16px rgba(220, 38, 38, 0.35);
+        }
+      `}</style>
     </>
   );
 }

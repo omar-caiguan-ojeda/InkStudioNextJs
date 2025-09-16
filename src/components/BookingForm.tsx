@@ -3,6 +3,12 @@
 import { useState, useRef } from "react";
 import Image from 'next/image';
 
+type Lang = 'es' | 'en';
+
+interface BookingFormProps {
+  language?: Lang;
+}
+
 interface BookingData {
   // Paso 1 - Nombre
   name: string;
@@ -104,7 +110,7 @@ const monthNames = [
 
 const weekdays = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
 
-export default function BookingForm() {
+export default function BookingForm({ language = 'es' }: BookingFormProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [bookingData, setBookingData] = useState<BookingData>({
     name: "",
@@ -132,6 +138,14 @@ export default function BookingForm() {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const formRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const t = {
+    headerTitle: language === 'en' ? 'Book Your Appointment' : 'Reserva tu Cita',
+    headerSubtitle:
+      language === 'en'
+        ? 'Schedule your tattoo session with our professional artists'
+        : 'Agenda tu sesión de tatuaje con nuestros artistas profesionales',
+  };
 
   const validateStep = (step: number): boolean => {
     const errors: ValidationErrors = {};
@@ -483,9 +497,9 @@ export default function BookingForm() {
         {currentStep < 14 && (
           <>
             <div className="booking-header">
-              <h2 className="booking-title">Reserva tu Cita</h2>
+              <h2 className="booking-title">{t.headerTitle}</h2>
               <p className="booking-subtitle">
-                Agenda tu sesión de tatuaje con nuestros artistas profesionales
+                {t.headerSubtitle}
               </p>
             </div>
 
