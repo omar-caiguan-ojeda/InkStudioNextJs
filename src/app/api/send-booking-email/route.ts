@@ -111,77 +111,148 @@ export async function POST(request: NextRequest) {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nueva Solicitud de Tatuaje - ${bookingNumber}</title>
 <style>
-  body { margin: 0; padding: 0; background-color: #0f172a; font-family: Arial, sans-serif; }
-  .container { max-width: 600px; margin: 0 auto; background-color: #1e293b; color: #f1f5f9; }
-  .header { padding: 40px 30px; text-align: center; background: linear-gradient(135deg, #1a1a1a 0%, #374151 100%); }
-  .logo { display: inline-block; margin-bottom: 15px; }
-  .content { padding: 30px; }
-  .card { background-color: #0f172a; border-radius: 12px; padding: 25px; margin-bottom: 20px; border: 1px solid #334155; }
-  h1 { color: #f1f5f9; margin: 0; font-size: 24px; }
-  h2 { color: #dc2626; margin-top: 0; font-size: 20px; border-bottom: 1px solid #334155; padding-bottom: 10px; }
-  p { line-height: 1.6; }
-  .booking-number { background-color: rgba(220, 38, 38, 0.2); color: #ef4444; padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 20px; }
-  .footer { text-align: center; padding: 20px; font-size: 12px; color: #64748b; }
-  .button { background-color: #dc2626; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold; }
+  body { margin: 0; padding: 0; background-color: #0f172a; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+  .container { max-width: 700px; margin: 0 auto; background-color: #1e293b; color: #f1f5f9; }
+  .header { padding: 40px 30px; text-align: center; background: linear-gradient(135deg, #1a1a1a 0%, #374151 100%); border-bottom: 3px solid #dc2626; }
+  .content { padding: 40px; }
+  .card { background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%); border-radius: 16px; padding: 30px; margin-bottom: 25px; border: 1px solid #334155; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); }
+  .card-header { color: #dc2626; font-size: 22px; font-weight: 700; margin: 0 0 20px 0; padding-bottom: 10px; border-bottom: 2px solid #dc2626; }
+  .data-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid #334155; }
+  .data-row:last-child { border-bottom: none; }
+  .data-label { font-weight: 600; color: #94a3b8; min-width: 160px; flex-shrink: 0; }
+  .data-value { font-weight: 500; color: #f1f5f9; text-align: right; flex-grow: 1; }
+  .booking-number { background: linear-gradient(135deg, rgba(220, 38, 38, 0.2) 0%, rgba(239, 68, 68, 0.1) 100%); color: #ef4444; padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 30px; border: 2px solid rgba(220, 38, 38, 0.3); }
+  .booking-number h2 { margin: 0; font-size: 24px; font-weight: 700; }
+  .success-card { background: linear-gradient(145deg, rgba(34, 197, 94, 0.15) 0%, rgba(22, 163, 74, 0.1) 100%); border: 2px solid rgba(34, 197, 94, 0.3); }
+  .success-header { color: #22c55e; font-size: 20px; font-weight: 700; }
+  .footer { text-align: center; padding: 30px; font-size: 13px; color: #64748b; background-color: #0f172a; border-top: 1px solid #334155; }
+  .button { background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%); color: white; padding: 15px 30px; text-decoration: none; border-radius: 10px; font-weight: 700; display: inline-block; box-shadow: 0 4px 16px rgba(220, 38, 38, 0.3); transition: all 0.3s ease; }
+  .button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4); }
+  .description-box { background-color: rgba(51, 65, 85, 0.5); padding: 20px; border-radius: 10px; margin-top: 20px; border-left: 4px solid #dc2626; }
+  .description-text { white-space: pre-wrap; line-height: 1.6; margin: 0; }
+  .images-list { background-color: rgba(51, 65, 85, 0.5); padding: 20px; border-radius: 10px; }
+  .image-item { padding: 8px 0; border-bottom: 1px solid rgba(148, 163, 184, 0.2); }
+  .image-item:last-child { border-bottom: none; }
+  .terms-list { list-style: none; padding: 0; margin: 0; }
+  .terms-item { padding: 8px 0; display: flex; align-items: center; }
+  .terms-item::before { content: "✓"; color: #22c55e; font-weight: bold; margin-right: 10px; }
   @media screen and (max-width: 600px) {
     .content { padding: 20px; }
     .header { padding: 30px 20px; }
+    .data-row { flex-direction: column; align-items: flex-start; }
+    .data-value { text-align: left; margin-top: 5px; }
   }
 </style>
 </head>
 <body>
 <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
 <tr><td align="center" style="padding: 20px 0; background-color: #0f172a;">
-<table class="container" role="presentation" width="600" border="0" cellspacing="0" cellpadding="0">
+<table class="container" role="presentation" width="700" border="0" cellspacing="0" cellpadding="0">
   <tr><td class="header">
-    <img src="https://inkstudio-tattoo.vercel.app/icon.png" alt="InkStudio Logo" width="60" class="logo">
-    <h1>INKSTUDIO</h1>
-    <p style="margin: 5px 0 0 0; color: #94a3b8;">Nueva Solicitud de Tatuaje</p>
+    <h1 style="color: #f1f5f9; margin: 15px 0 5px 0; font-size: 32px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">INKSTUDIO</h1>
+    <p style="margin: 0; color: #94a3b8; font-size: 16px;">Sistema Profesional de Reservas</p>
   </td></tr>
   <tr><td class="content">
-    <div class="booking-number"><h2>Número de Reserva: ${bookingNumber}</h2></div>
-    <div class="card">
-      <h2>Información Personal</h2>
-      <p><strong>Nombre:</strong> ${bookingData.name}</p>
-      <p><strong>Email:</strong> <a href="mailto:${bookingData.email}" style="color: #ef4444;">${bookingData.email}</a></p>
-      <p><strong>Teléfono:</strong> <a href="tel:${bookingData.phone}" style="color: #ef4444;">${bookingData.phone}</a></p>
-      <p><strong>Nos encontró por:</strong> ${howFoundUsLabels[bookingData.howFoundUs] || bookingData.howFoundUs}</p>
+    <div class="booking-number">
+      <h2>NÚMERO DE RESERVA: ${bookingNumber}</h2>
     </div>
+
     <div class="card">
-      <h2>Detalles del Tatuaje</h2>
-      <p><strong>Artista preferido:</strong> ${bookingData.preferredArtist}</p>
-      <p><strong>Ubicación:</strong> ${bookingData.bodyLocation}</p>
-      <p><strong>Tamaño:</strong> ${tattooSizeLabels[bookingData.tattooSize] || bookingData.tattooSize}</p>
-      <p><strong>Presupuesto:</strong> ${budgetLabels[bookingData.budgetRange] || bookingData.budgetRange}</p>
-      <p><strong>Estilo:</strong> ${colorStyleLabels[bookingData.colorStyle] || bookingData.colorStyle}</p>
-      <p style="margin-top: 20px;"><strong>Descripción:</strong><br>${bookingData.description}</p>
+      <h2 class="card-header">👤 INFORMACIÓN DEL CLIENTE</h2>
+      <div class="data-row">
+        <span class="data-label">Nombre completo:</span>
+        <span class="data-value">${bookingData.name}</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Email:</span>
+        <span class="data-value"><a href="mailto:${bookingData.email}" style="color: #ef4444; text-decoration: none;">${bookingData.email}</a></span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Teléfono:</span>
+        <span class="data-value"><a href="tel:${bookingData.phone}" style="color: #ef4444; text-decoration: none;">${bookingData.phone}</a></span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Fuente de referencia:</span>
+        <span class="data-value">${howFoundUsLabels[bookingData.howFoundUs] || bookingData.howFoundUs}</span>
+      </div>
     </div>
+
     <div class="card">
-      <h2>Cita Solicitada</h2>
-      <p><strong>Fecha:</strong> ${formattedDate}</p>
-      <p><strong>Hora:</strong> ${bookingData.time}</p>
+      <h2 class="card-header">🎨 DETALLES DEL TATUAJE</h2>
+      <div class="data-row">
+        <span class="data-label">Artista preferido:</span>
+        <span class="data-value">${bookingData.preferredArtist}</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Ubicación en el cuerpo:</span>
+        <span class="data-value">${bookingData.bodyLocation}</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Tamaño estimado:</span>
+        <span class="data-value">${tattooSizeLabels[bookingData.tattooSize] || bookingData.tattooSize}</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Rango de presupuesto:</span>
+        <span class="data-value">${budgetLabels[bookingData.budgetRange] || bookingData.budgetRange}</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Estilo de color:</span>
+        <span class="data-value">${colorStyleLabels[bookingData.colorStyle] || bookingData.colorStyle}</span>
+      </div>
+      <div class="description-box">
+        <h3 style="margin: 0 0 15px 0; color: #dc2626; font-size: 18px;">📝 Descripción del diseño:</h3>
+        <div class="description-text">${bookingData.description}</div>
+      </div>
     </div>
+
+    <div class="card">
+      <h2 class="card-header">📅 CITA SOLICITADA</h2>
+      <div class="data-row">
+        <span class="data-label">Fecha:</span>
+        <span class="data-value" style="font-size: 18px; font-weight: 600;">${formattedDate}</span>
+      </div>
+      <div class="data-row">
+        <span class="data-label">Hora:</span>
+        <span class="data-value" style="font-size: 18px; font-weight: 600;">${bookingData.time}</span>
+      </div>
+    </div>
+
     ${bookingData.referenceImages.length > 0 ? `
     <div class="card">
-      <h2>Imágenes de Referencia (${bookingData.referenceImages.length})</h2>
-      <p>Las imágenes se han adjuntado a este correo.</p>
-      <ul>${bookingData.referenceImages.map(img => `<li>${img.name}</li>`).join('')}</ul>
+      <h2 class="card-header">📎 IMÁGENES DE REFERENCIA (${bookingData.referenceImages.length})</h2>
+      <div class="images-list">
+        ${bookingData.referenceImages.map((img, index) => `
+          <div class="image-item">
+            <strong>📷 ${img.name}</strong> - ${img.type.toUpperCase()}
+          </div>
+        `).join('')}
+        <p style="margin: 15px 0 0 0; padding: 15px; background-color: rgba(59, 130, 246, 0.1); border-radius: 8px; border-left: 4px solid #3b82f6;">
+          💡 Las imágenes han sido adjuntadas como archivos separados a este correo electrónico.
+        </p>
+      </div>
     </div>` : ''}
-    <div class="card" style="background-color: rgba(34, 197, 94, 0.1); border-color: #22c55e;">
-      <h2 style="color: #22c55e;">✅ Términos Aceptados</h2>
-      <ul style="color: #a7f3d0;">
-        <li>Confirmó ser mayor de 18 años</li>
-        <li>Aceptó los términos y condiciones</li>
-        <li>Aceptó la política de privacidad</li>
+
+    <div class="card success-card">
+      <h2 class="success-header">✅ TÉRMINOS Y CONDICIONES ACEPTADOS</h2>
+      <ul class="terms-list" style="color: #a7f3d0;">
+        <li class="terms-item">Confirmó ser mayor de 18 años</li>
+        <li class="terms-item">Aceptó los términos y condiciones generales</li>
+        <li class="terms-item">Aceptó la política de privacidad y tratamiento de datos</li>
+        <li class="terms-item">Está de acuerdo con los requisitos de depósito y cancelación</li>
       </ul>
     </div>
-    <div style="text-align: center; margin-top: 30px;">
-      <a href="mailto:${bookingData.email}" class="button">Contactar Cliente</a>
+
+    <div style="text-align: center; margin-top: 40px; padding: 30px; background: linear-gradient(135deg, rgba(220, 38, 38, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%); border-radius: 12px;">
+      <a href="mailto:${bookingData.email}" class="button">📧 Contactar Cliente</a>
+      <p style="margin: 15px 0 0 0; font-size: 14px; color: #94a3b8;">
+        Recomendamos contactar al cliente dentro de las próximas 4-8 horas para confirmar disponibilidad.
+      </p>
     </div>
   </td></tr>
   <tr><td class="footer">
-    <p>InkStudio - Sistema de Reservas</p>
-    <p>Fecha de solicitud: ${new Date().toLocaleString('es-ES')}</p>
+    <p><strong>InkStudio - Sistema Profesional de Reservas</strong></p>
+    <p>📅 Fecha de solicitud: ${new Date().toLocaleString('es-ES')}</p>
+    <p>⏰ Procesado automáticamente por el sistema de reservas</p>
   </td></tr>
 </table>
 </td></tr>
@@ -212,9 +283,9 @@ export async function POST(request: NextRequest) {
   .content { padding: 30px; }
   .card { background-color: #0f172a; border-radius: 12px; padding: 25px; margin-bottom: 20px; border: 1px solid #334155; }
   h1 { color: #f1f5f9; margin: 0; font-size: 24px; }
-  h2 { color: #dc2626; margin-top: 0; font-size: 20px; }
-  p { line-height: 1.6; color: #cbd5e1; }
-  .booking-number { background-color: rgba(220, 38, 38, 0.2); color: #ef4444; padding: 20px; border-radius: 12px; text-align: center; margin: 25px 0; }
+  h2 { color: #dc2626; margin-top: 0; font-size: 20px; border-bottom: 1px solid #334155; padding-bottom: 10px; }
+  p { line-height: 1.6; }
+  .booking-number { background-color: rgba(220, 38, 38, 0.2); color: #ef4444; padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 20px; }
   .footer { text-align: center; padding: 20px; font-size: 12px; color: #64748b; }
   .button { background-color: #dc2626; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: bold; }
   @media screen and (max-width: 600px) {
@@ -228,7 +299,7 @@ export async function POST(request: NextRequest) {
 <tr><td align="center" style="padding: 20px 0; background-color: #0f172a;">
 <table class="container" role="presentation" width="600" border="0" cellspacing="0" cellpadding="0">
   <tr><td class="header">
-    <img src="https://inkstudio-tattoo.vercel.app/icon.png" alt="InkStudio Logo" width="60" class="logo">
+    <img src="https://inkstudio.protoly.lat/icon.png" alt="InkStudio Logo" width="60" class="logo">
     <h1>INKSTUDIO</h1>
     <p style="margin: 5px 0 0 0; color: #94a3b8;">Arte en tu Piel</p>
   </td></tr>
@@ -248,8 +319,8 @@ export async function POST(request: NextRequest) {
         <tr><td style="padding: 10px 0;">Hora solicitada:</td><td align="right" style="font-weight: bold;">${bookingData.time}</td></tr>
       </table>
     </div>
-    <div class="card" style="background-color: rgba(59, 130, 246, 0.1); border-color: #3b82f6;">
-      <h3 style="color: #60a5fa;">🚀 Próximos Pasos</h3>
+    <div class="card" style="background-color: rgba(34, 197, 94, 0.1); border-color: #22c55e;">
+      <h3 style="color: #22c55e;">🚀 Próximos Pasos</h3>
       <p>1. <strong>Revisión:</strong> Nuestro equipo revisará tu solicitud.</p>
       <p>2. <strong>Contacto:</strong> Te contactaremos en las próximas 4-8 horas para confirmar los detalles.</p>
       <p>3. <strong>Confirmación:</strong> Finalizaremos la fecha, hora y te enviaremos las instrucciones para el depósito.</p>
